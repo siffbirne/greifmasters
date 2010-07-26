@@ -1,0 +1,96 @@
+<?php
+
+    require_once('rgrid/RGrid.php');
+
+    
+    $params['hostname'] = 'localhost';
+    $params['username'] = 'root';
+    $params['password'] = '';
+    $params['database'] = 'greifmasters';
+
+    $sql = "SELECT *
+              FROM courts
+    ";
+
+    /**
+    * Create the datagrid with the connection parameters and SQL query
+    * defined above. You MUST specify an ORDER BY
+    * clause (with ASC/DESC direction indicator) - if not then ordering
+    * will be fubar. I will eventually fix this so that the headers
+    * aren't clickable if you don't supply an ORDER BY, for the time
+    * being just specify an ORDER BY clause (the one you specify will
+    * be used by default).
+    */
+    $grid = RGrid::Create($params, $sql);
+
+    /**
+    * Disable sorting
+    */
+    //$grid->allowSorting = false;
+
+    /**
+    * Turn the column headers off/on
+    */
+    $grid->showHeaders = true;
+    
+    /**
+    * No sorting by the status column
+    */
+    $grid->NoSort('id');
+
+    /**
+    * Sets nice(r) display names instead of the raw column names
+    */
+    $grid->SetDisplayNames(array('id'       => 'ID',
+                                 'name'    => 'Name',
+                                 'location'   => 'Location'
+    ));
+
+    /**
+    * This simply sets the specified columns not to be passed through htmlspecialchars()
+    * Generally any column that shows HTML
+    */
+    #$grid->NoSpecialChars('ne_title', 'cm_status');
+    
+    /**
+    * Hide the cm_neid column as it's only used for linking purposes
+    */
+    $grid->HideColumn('status', 'owner');
+    
+    /**
+    * Here just for show. This function sets the number of rows to set per page.
+    * The default is 20.
+    */
+    $grid->SetPerPage(15);
+    
+    /**
+    * This is the callback that colours the text red or green
+    */
+    #$grid->AddCallback('RowCallback');
+
+    function RowCallback(&$row) // The ampersand is so that any changes made are reflected in the final grid
+    {
+        $row['cm_status'] = ($row['cm_status'] == 'ACTIVE' ? '<span style="font-weight: 700; color: green">ACTIVE</span>' : '<span style="font-weight: 700; color: red">ACTIVE</span>');
+        $row['ne_title']  = sprintf('<a href="/article.php/%d" target="_blank">%s</a>', $row['cm_neid'], $row['ne_title']);
+    }
+    
+    /**
+    * The HTML. The appearance can be customised using CSS. Naturally you would (should) put
+    * all of the datagrid styling in a central CSS file that can be <link>ed to by all of
+    * your websites' pages. That way:
+    *  o All of your datagrids will look the same
+    *  o Changes to the appearance will affect all of your datagrids across your
+    *    entire website. You might want this necessarily, but must do.
+    *
+    * eg. <link rel="stylesheet" type="text/css" media="screen" href="/css/datagrid.css" />
+    */
+
+    $grid->Display();
+
+    
+    
+    
+    
+    ?>
+    
+   

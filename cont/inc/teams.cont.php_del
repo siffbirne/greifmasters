@@ -1,0 +1,33 @@
+<?php
+	if( isset ($_GET ['action']) && $_GET ['action'] == 'create') {
+
+
+		echo"get action: add_team<br>";
+
+		$form_entries = array();
+
+		while( list ( $key, $value ) = each ( $_POST ) ){
+			$value = htmlentities($value);
+			$form_entries[$key] = mysql_real_escape_string($value);
+		}
+
+
+		$new_team = new team($form_entries);
+
+			try {
+				$new_team->save_team($_SESSION['user']);
+				$_SESSION['notification']=3;
+				header ( "Location: ../team/".$new_team->id );
+				# fixen!! relativ
+
+			}
+			catch (Exception $exception){
+				echo 'Error: '.$exception -> getMessage().'<br />';
+			  	echo 'File: '.$exception -> getFile().'<br />';
+			  	echo 'Line: '.$exception -> getLine().'<br />';
+			}
+
+	}else{
+		include 'inc/forms/create_team.form.inc.php';
+	}
+?>

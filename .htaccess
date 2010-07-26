@@ -1,0 +1,7 @@
+# public/.htaccess
+
+RewriteEngine On
+
+
+RewriteBase /greifmasters
+RewriteRule ^admin/?([^/\.]+)?/?([^/\.]+)?/?([^/\.]+)?/?([^/\.]+)?/?([^/\.]+)?/?([^/\.]+)?$ admin.php?cat=$1&p1=$2&p2=$3&p3=$4&p4=$5&p5=$6 [L]

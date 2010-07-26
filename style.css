@@ -1,0 +1,263 @@
+body, html{
+	
+	font-family: Helvetica, Arial;
+	font-size: 11px;
+	color: #fff;
+	background-color: #333333;
+}
+
+
+
+
+/*layout-------------------------------*/
+
+div#pageframe{
+	position: absolute;
+	left: 50%;
+	top: 100px;
+	margin-left: -512px;
+	width: 1024px;
+}
+
+
+div#navBoxesContainer{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 180px;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	
+}
+
+div.navBox{
+	
+	padding: 10 0px;
+	
+}
+
+div.navHeading{
+	
+	border: 1px solid #ccc;
+	background-color: #666;
+	font-weight: bold;
+	
+}
+
+div#contentContainer{
+	
+	position: absolute;
+	left: 190px;
+	top: 0px;
+	width: 844px;
+	
+}
+
+div.navBox{
+	border: 1 0px solid #ccc;
+	margin: 3px;
+}
+
+
+table{
+	font-family: Helvetica;
+	font-size: 11px;
+	color: #fff;
+	border-spacing: 0px;
+}
+
+div#footer{
+	clear: both;
+	margin-top:100px;
+	border-top: 1px solid #ccc;
+	text-align: center;
+	display: none;
+}
+
+
+/*general-------------------------------*/
+
+a, a:link, a:visited {
+	color: #fff;
+	text-decoration: underline;
+}
+
+a:hover {
+	color: #fff;
+	text-decoration: none;
+}
+
+
+span.grey1{
+	color: #ccc;
+}
+
+span.grey2{
+	color: #666;
+}
+
+
+span.red{
+	color: red;
+}
+
+span.green{
+	color: green;
+}
+
+span.orange{
+	color: orange;
+}
+
+span.yellow{
+	color: yellow;
+}
+
+.margin_left{
+	margin-left: 10px;
+}
+
+
+
+
+
+table td{
+	padding:3px;
+}
+
+table th{
+	text-align: center;
+}
+
+
+
+table.ranking{
+	border: 1px solid #ccc;
+	width: 100%;
+}
+
+table.ranking td{
+	border-bottom: 1px solid #ccc;
+	text-align:center;
+}
+table.ranking th{
+	border-bottom: 3px double #ccc;
+}
+
+
+
+table.tournament_outline{
+	
+	width: 200px;
+	height: 100px;
+	
+}
+
+
+
+div.play_tournament_controls#upcgames{
+	clear: both;
+	
+}
+
+
+
+div.play_tournament_team1{
+
+	float:left;
+	
+}
+
+table.play_tournament_team1{
+	float: left;
+}
+
+
+table.play_tournament_team2{
+	float: right;
+
+}
+
+
+table.play_tournament_team td{
+	padding: 0px;
+}
+
+table.play_tournament_team td.team_name{
+	padding: 20px;
+	font: 20px verdana;
+}
+
+table.play_tournament_team{
+	padding: 0px;
+
+}
+
+div.play_tournament_team{
+margin-top: 20px;
+
+}	
+	
+
+div.play_tournament_team2{
+
+	float: right;
+	
+}
+
+div.play_tournament_team img{
+	border: 1px solid black;
+}
+
+div.play_tournament_score{
+	position: relative;
+	top: 100px;
+	width: 100%;
+}
+
+div.play_tournament_controls#main_display {
+
+	width: 100%;
+	border: 1px solid white;
+	height: 110px;
+
+	
+}
+
+div.play_tournament_controls #timeandscore	{
+	align: center;
+	font: 40px verdana;
+	text-align: center;
+
+
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+ul.sortable
+{
+widht: 500px;
+margin-left: 0;
+padding-left: 0;
+list-style-type: none;
+}
+
+ul.sortable li
+{
+color: #FFF;
+display: block;
+padding: 3px;
+width: 460px;
+background-color: #036;
+border-bottom: 1px solid #eee;
+}

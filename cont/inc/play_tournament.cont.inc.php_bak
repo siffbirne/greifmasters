@@ -1,0 +1,59 @@
+<?php
+
+if (isset ( $_GET ['p1'] ) && $_GET ['p1'] == 'goal') {
+	
+	if (isset($_GET['p2']) && $_GET['p2'] == 'store'){
+	
+		$team = $_POST ['team'];
+		$player = $_POST ['player'];
+		$match = $_SESSION ['match_id'];
+		$minute = 0;
+		if (isset ( $_POST ['owngoal'] )) {
+			$regular = 0;
+		} else {
+			$regular = 1;
+		}
+		
+		$goal = new goal ( );
+		$goal->store ( $team, $player, $match, $minute, $regular );
+		echo "tor";
+		
+	}
+	
+	if (isset($_GET['p2']) && $_GET['p2'] == 'delete'){
+		$goal = new goal();
+		$goal->delete($_GET['p3']);
+		
+	}
+
+}
+
+if (isset ( $_GET ['p1'] ) && $_GET ['p1'] == 'finish_match'){
+	$upc_match = new upc_match();
+	$upc_match->finish($_SESSION['match_id']);
+	unset ($_SESSION['match_id']);
+}
+
+
+
+
+if (isset ( $_GET ['p1'] ) && $_GET ['p1'] == 'matches'){
+	
+	include 'inc/playtournament/matches.playtournament.cont.inc.php';
+	
+	
+	
+	return;
+}
+
+
+?>
+
+
+
+
+
+
+
+</div>
+</div>

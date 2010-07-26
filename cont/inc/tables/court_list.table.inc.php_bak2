@@ -1,0 +1,61 @@
+<?php
+
+	include 'datagrid/phpmydatagrid.class.php';
+
+	$objGrid = new datagrid;
+	
+	$objGrid -> friendlyHTML();
+
+	$objGrid -> pathtoimages("/greifmasters/datagrid/images/");
+
+	$objGrid -> closeTags(true);  
+	
+	$objGrid -> form('courts', true);
+	
+	$objGrid -> methodForm("post"); 
+	
+	#$objGrid -> total("salary,workeddays");
+	
+	$objGrid -> searchby("id,name,location");
+	
+	$objGrid -> linkparam("sess=".$_REQUEST["sess"]."&username=".$_REQUEST["username"]);	 
+	
+	$objGrid -> decimalDigits(2);
+	
+	$objGrid -> decimalPoint(",");
+	
+	$objGrid -> conectadb("127.0.0.1", "root", "", "greifmasters");
+	
+	$objGrid -> tabla ("courts");
+
+	/* Allow Add, edit, delete or view records */
+	$objGrid -> buttons(false,true,true,true);
+	
+	/* Keyfield must be defined to indentify each row */
+	$objGrid -> keyfield("id");
+
+	/* A code is related with some transactions. so is very dificult to someone to try to do unauthorized process */
+	/* There are a internal code but you can made it strong by setting this function" */
+	$objGrid -> salt("Some Code4Stronger(Protection)");
+
+	$objGrid -> TituloGrid("List of available courts");
+
+	$objGrid -> datarows(20);
+	
+	$objGrid -> paginationmode('links');
+
+	$objGrid -> orderby("id", "DESC");
+
+	$objGrid -> noorderarrows();
+	
+
+	$objGrid -> FormatColumn("name", "Name", 30, 30, 0, "150", "left");
+	$objGrid -> FormatColumn("location", "Location", 30, 30, 0, "150", "left");
+
+
+	$header = $objGrid -> setHeader();
+	
+	$objGrid -> grid();
+	
+	$objGrid -> desconectar();
+?>

@@ -1,0 +1,126 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	background-image: url(gfx/display_output/background_800x600.gif);
+	background-repeat: no-repeat;
+	font-family: Helvetica, Arial;
+	font-weight: bold;
+	color: #333;
+}
+
+div#score{
+	position: absolute;
+	top: 150px;
+	left: 35px;
+	font-size: 60px;
+	font-weight: bold;
+}
+
+div#logo1{
+	position: absolute;
+	top: 100px;
+	left: 50px;
+}
+
+div#logo2{
+	position: absolute;
+	top: 100px;
+	right: 50px;
+}
+
+div#team1{
+	
+}
+
+div#team2{
+	
+}
+
+div#team1{
+	
+}
+
+.play_tournament_team1 
+{
+}
+
+.play_tournament_team1 .team_name
+{
+	width:200px;
+	height: 30px;
+	font-size: 20pt;
+	left: 150px;
+	position: absolute;
+	top: 55px;
+}
+
+.play_tournament_team2 .team_name
+{
+	width:200px;
+	height: 30px;
+	font-size: 20pt;
+	left: 390px;
+	position: absolute;
+	top: 55px;
+}
+
+.play_tournament_team2 img
+{
+	position: absolute;
+	left: 620px;
+	top: 0px;
+}
+
+.play_tournament_team1
+{
+	width: 500px;
+}
+
+#timeandscore
+{
+	position: absolute;
+	top: 0px;
+	left: 290px;
+}
+
+#Anzeige
+{
+	position: absolute;
+	left: -280px;
+	top: 124px;
+	font-size: 110pt;
+}
+
+#rank {
+	height:240px;
+	left:402px;
+	position:absolute;
+	top:326px;
+	width:372px;
+}
+
+#rank-label
+{
+	font-size: 30pt;
+	position: absolute;
+	top: 300px;
+	left: 423px;
+}
+
+#upcoming {
+	height:123px;
+	left:24px;
+	position:absolute;
+	top:413px;
+	width:371px;
+}
+
+#time
+{
+	position: absolute;
+	font-size: 46pt;
+	height:110px;
+	left:632px;
+	top:24px;
+	width:142px;	
+}

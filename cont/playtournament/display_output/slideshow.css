@@ -1,0 +1,12 @@
+body
+{
+	background-image: url(../../../gfx/slideshow-bg.gif);
+	background-repeat: no-repeat;
+}
+
+#sponsor-img
+{
+	position: absolute;
+	top: 142px;
+	left: 24px;
+}

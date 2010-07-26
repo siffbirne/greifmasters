@@ -1,0 +1,19 @@
+RewriteEngine on
+
+
+RewriteRule !^admin/ - [S=6]
+#
+# Else copy/append admins to user-defined variable "tQuery"
+RewriteRule ^admin(/[^/]+)*/cat_([^/]+) - [NC,E=tQuery:%{ENV:tQuery}cat=$2]
+RewriteRule ^admin(/[^/]+)*/subcat_([^/]+) - [NC,E=tQuery:%{ENV:tQuery}&subcat=$2]
+RewriteRule ^admin(/[^/]+)*/action_([^/]+) - [NC,E=tQuery:%{ENV:tQuery}&action=$2]
+RewriteRule ^admin(/[^/]+)*/id_([^/]+) - [NC,E=tQuery:%{ENV:tQuery}&id=$2]
+# Strip leading "&" from tQuery (if any)
+RewriteCond %{ENV:tQuery} ^&(.+)$
+RewriteRule ^admin/ - [NC,E=tQuery:%1]
+#
+# Rewrite the URL-path to index.php query format
+# RewriteRule ^admin/ /admin.php?%{ENV:tQuery} [NC,L]
+#
+# Use the following rule for easier testing only, then un-comment the rule above and delete this one.
+RewriteRule ^admin/ http://localhost/greifmasters/admin.php?%{ENV:tQuery} [NC,R=301,L] 
