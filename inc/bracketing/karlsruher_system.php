@@ -93,13 +93,13 @@ if (isset($_SESSION['temp']['bracket']['nextstep'])){
 	$bracket->seeding();
     $seeding = $bracket->get_seeding();
     
-	$i = 1;
+	$offset_count = 1;
     foreach ($seeding as $data)
     {
     	$team = new team();
-		echo '<li id="item_'. $data['id'] .'">'. $i. '.) ' . $team->get_name_by_id($data['team_id']) .'</li>';
+		echo '<li id="item_'. $data['id'] .'">'. $offset_count. '.) ' . $team->get_name_by_id($data['team_id']) .'</li>';
 		echo "\n";
-		$i++;
+		$offset_count++;
 	}
 ?>
 	</ul>

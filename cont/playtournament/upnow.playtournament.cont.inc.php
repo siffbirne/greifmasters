@@ -1,10 +1,13 @@
 <?php
 
 
+#@FIXME: clear url to standard after get-triggered actions to enable reload-ability
 
 if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'goal') {
+	unset($_GET ['p3']);
 	
 	if (isset($_GET['p4']) && $_GET['p4'] == 'store'){
+		unset($_GET ['p4']);
 	
 		$team = $_POST ['team'];
 		$player = $_POST ['player'];
@@ -25,8 +28,10 @@ if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'goal') {
 	if (isset($_GET['p4']) && $_GET['p4'] == 'delete'){
 		$goal = new goal();
 		$goal->delete($_GET['p5']);
+		unset($_GET ['p5']);
 		
 	}
+
 
 }
 
@@ -38,6 +43,7 @@ if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'finish_match'){
 	$match->finish();
 	
 	unset ($_SESSION['match_id']);
+	unset($_GET ['p3']);
 }
 
 

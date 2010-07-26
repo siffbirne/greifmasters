@@ -20,13 +20,13 @@ set order of teams:<br /><br />
 	$db = new db('seeding');
 	
     $result = $db->fetch_results("SELECT * FROM seeding ORDER BY value");
-	$i = 1;
+	$offset_count = 1;
     foreach ($result as $data)
     {
     	$team = new team();
-		echo '<li id="item_'. $data['id'] .'">'. $i. '.) ' . $team->get_name_by_id($data['id']) .'</li>';
+		echo '<li id="item_'. $data['id'] .'">'. $offset_count. '.) ' . $team->get_name_by_id($data['id']) .'</li>';
 		echo "\n";
-		$i++;
+		$offset_count++;
 	}
 ?>
 </ul>

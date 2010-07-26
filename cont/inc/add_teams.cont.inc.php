@@ -2,13 +2,13 @@
 
 if (isset ( $_POST ['submit'] ) && $_POST ['submit'] == 1) {
 	
-	for($i = 1; $i <= $_POST ['num_postvars']; $i ++) {
+	for($offset_count = 1; $offset_count <= $_POST ['num_postvars']; $offset_count ++) {
 		
-		if (isset ( $_POST ['team_' . $i] )) {
+		if (isset ( $_POST ['team_' . $offset_count] )) {
 			$registration = new registration ( );
 			
 			try {
-				$registration->new_registration ( $_POST ['team_' . $i], $_SESSION ['tournament_id'], $_SESSION ['user'] );
+				$registration->new_registration ( $_POST ['team_' . $offset_count], $_SESSION ['tournament_id'], $_SESSION ['user'] );
 				header ( "Location: /greifmasters/admin/tournament/$tournament->id/" );
 			} catch ( Exception $exception ) {
 				echo 'Error: ' . $exception->getMessage () . '<br />';
@@ -35,19 +35,19 @@ if (isset ( $_POST ['submit'] ) && $_POST ['submit'] == 1) {
 	
 	$result = mysql_query ( $query ) or die ( mysql_error () );
 	
-	$i = 0;
+	$offset_count = 0;
 	while ( $row = mysql_fetch_row ( $result ) ) {
 		
 		$is_registered = new registration ( );
 		if ($is_registered->is_registered ( $row [0], $_SESSION ['tournament_id'] ) == FALSE) {
 			
-			$i ++;
+			$offset_count ++;
 			echo '
-					<input type="checkbox" name="team_' . $i . '" value="' . $row [0] . '"/> ' . $row [1] . '<br />
+					<input type="checkbox" name="team_' . $offset_count . '" value="' . $row [0] . '"/> ' . $row [1] . '<br />
 				';
 		
 		}
 	}
-	echo '<input type="hidden" name="num_postvars" value="' . $i . '"><input type="submit" value="Add teams" /></form>';
+	echo '<input type="hidden" name="num_postvars" value="' . $offset_count . '"><input type="submit" value="Add teams" /></form>';
 }
 ?>

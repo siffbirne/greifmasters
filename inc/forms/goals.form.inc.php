@@ -6,7 +6,7 @@
 		
 			<td><?php echo $players['player1']; ?>:</td>
 			<td><input type="submit" class="change_goal" name="goal" value="Goal!" /></td>
-			<td><input type="checkbox" name="owngoal" value="1" /></td>
+<!--			<td><input type="checkbox" name="owngoal" value="1" /></td>-->
 			
 		</form>
 	</tr>
@@ -17,7 +17,7 @@
 		
 			<td><?php echo $players['player2']; ?>:</td>
 			<td><input type="submit" class="change_goal" name="goal" value="Goal!" /></td>
-			<td><input type="checkbox" name="owngoal" value="1" /></td>
+<!--			<td><input type="checkbox" name="owngoal" value="1" /></td>-->
 			
 		</form>
 	</tr>
@@ -28,7 +28,7 @@
 		
 			<td><?php echo $players['player3']; ?>:</td>
 			<td><input type="submit" class="change_goal" name="goal" value="Goal!" /></td>
-			<td><input type="checkbox" name="owngoal" value="1" /></td>
+<!--			<td><input type="checkbox" name="owngoal" value="1" /></td>-->
 			
 		</form>
 	</tr>

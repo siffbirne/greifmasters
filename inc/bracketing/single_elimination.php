@@ -34,17 +34,17 @@ if (isset($_SESSION['temp']['bracket']['nextstep'])){
 						</tr>
 				';
 				
-				$i=1;
-				while ( $top/2 >= 2 && $i<5){
+				$offset_count=1;
+				while ( $top/2 >= 2 && $offset_count<5){
 					echo '
 						<tr>
 							<td>best '.$top.'<td>
-							<td><input type="text" name="timelimit_'.$i.'" maxlength="2" /></td>
-							<td><input type="text" name="pause_'.$i.'" maxlength="2" /></td>
+							<td><input type="text" name="timelimit_'.$offset_count.'" maxlength="2" /></td>
+							<td><input type="text" name="pause_'.$offset_count.'" maxlength="2" /></td>
 						</tr>
 					';
 					$top = $top/2;
-					$i++;
+					$offset_count++;
 				}
 				echo '
 						<tr>
@@ -104,8 +104,8 @@ if (isset($_SESSION['temp']['bracket']['nextstep'])){
 		Admitted teams for this bracket:<br />
 		top <select name="top">
 	';
-	for ($i=1; $i<8; $i++){
-		echo '<option>'.pow(2,$i).'</option>';
+	for ($offset_count=1; $offset_count<8; $offset_count++){
+		echo '<option>'.pow(2,$offset_count).'</option>';
 	}
 	echo '</select> teams from bracket: <select name="bracket">
 	';

@@ -15,7 +15,7 @@ $_SESSION['user'] = 2;
 
 
 
-if (! isset ( $_SESSION ['admin'] ) || $_SESSION ['admin'] != TRUE) {
+if (! isset ( $_SESSION ['user'] )) {
 	header ( "Location: login.php" );
 	exit ();
 }
@@ -120,16 +120,28 @@ switch ($_SESSION['cat']) {
 
 }
 
+if ($_SESSION['admin'] == TRUE){
+	if ($_SESSION['cat'] == 'debug_mode'){
+		if ($_SESSION['debug_mode']){
+			$_SESSION['debug_mode'] = FALSE;
+		}else{
+			$_SESSION['debug_mode'] = TRUE;
+		}
+		include 'cont/general.php';
+	}
+}
+
 
 
 $contents = ob_get_contents();
 ob_end_clean();
 
 if(!$noTemplates) {
-	echo"get: "; var_dump ($_GET);echo"<br>";
-	echo"post: "; var_dump ($_POST);echo"<br>";
-	echo"session: "; var_dump ($_SESSION);echo"<br>";
-
+	if ($_SESSION['debug_mode']== TRUE){
+		echo"get: "; var_dump ($_GET);echo"<br>";
+		echo"post: "; var_dump ($_POST);echo"<br>";
+		echo"session: "; var_dump ($_SESSION);echo"<br>";
+	}
 
 	include TPL_INCLUDE_PATH . 'head.tpl.php';
 

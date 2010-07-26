@@ -23,6 +23,7 @@ if (isset ( $_GET ['login'] ) && $_GET ['login'] == 1) {
 			$pwdb = $row ['pass'];
 			$salt = $row ['salt'];
 			$user_id = $row ['id'];
+			$rights = $row['rights'];
 		}
 
 		if (mysql_affected_rows () == 0) {
@@ -32,7 +33,10 @@ if (isset ( $_GET ['login'] ) && $_GET ['login'] == 1) {
 		} elseif ($pwdb == md5 ( $pw . $salt . $user )) {
 
 			session_start ();
-			$_SESSION['admin']=TRUE;
+			if ($rights == 'admin'){
+				$_SESSION['admin']=TRUE;
+			}
+			
 			$_SESSION['user'] = $user_id;
 
 			header ( "Location: admin" );

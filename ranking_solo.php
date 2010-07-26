@@ -29,7 +29,7 @@
 	$upc_matches = new upc_match ( );
 	$upc_matches = $upc_matches->fetch_results ( $query );
 	
-	$i=0;
+	$offset_count=0;
 	$count=0;
 	$ready_signal_offset = 3;
 
@@ -77,7 +77,7 @@
 			<td>' . (date('D, H:i', $scheduled_time)) . '</td>
 			<td>';
 		
-			if ($i < $ready_signal_offset){
+			if ($offset_count < $ready_signal_offset){
 				if ($upc_match ['ready_team1'] == 1) {
 					echo '<span class="green">' . $upc_match ['team1'] . '</span>';
 				} else {
@@ -91,7 +91,7 @@
 			<td>-</td>
 			</td><td>';
 			
-			if ($i < $ready_signal_offset){
+			if ($offset_count < $ready_signal_offset){
 				if ($upc_match ['ready_team2'] == 1) {
 					echo '<span class="green">' . $upc_match ['team2'] . '</span>';
 				} else {
@@ -106,7 +106,7 @@
 			<td>action</td>
 		</tr>
 		';
-		$i++;
+		$offset_count++;
 		$count++;
 	}
 	

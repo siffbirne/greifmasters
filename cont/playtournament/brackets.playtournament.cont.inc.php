@@ -12,7 +12,7 @@ if (isset($_GET['p2']) && $_GET['p2'] == 'new'){
 			$_SESSION['temp']['bracket']['type'] = $_POST['type'];
 		}
 		
-		
+		#@todo: crap
 		if (isset($_SESSION['temp']['bracket']['type'])){
 			include DIR_BRACKETING.'/'.$_SESSION['temp']['bracket']['type'].'.php';
 		}else{
@@ -68,7 +68,7 @@ if(isset($_GET['p2']) && is_numeric($_GET['p2'])){
 			$courts = new court();
 			$courts = $courts->list_entries();
 			
-			echo '<form action="'.BASE.'play_tournament/brackets/'.$_SESSION['bracket_id'].'/settings" method="post">';
+			echo 'caution! unless you know what youre doing only use once!<br /><form action="'.BASE.'play_tournament/brackets/'.$_SESSION['bracket_id'].'/settings" method="post">';
 			
 			foreach ($courts as $court){
 				#@todo: check einbauen ob schon in benutzung

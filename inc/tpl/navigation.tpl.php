@@ -25,18 +25,25 @@
 	</div>
 	
 	<div class="navBox">
-		<div class="navHeading">Settings</div>
-
-			<a href="/greifmasters/admin/test_code">test_code.php</a><br />
-			<a href="/greifmasters/admin/setup">Setup</a>
-	</div>
-
-	<div class="navBox">
 		<div class="navHeading">Controls</div>
 
-			<a href="/greifmasters/session_destroy.php">destroy session</a><br />
-			<a href="/greifmasters/admin/settings">Settings</a><br />
-			<a href="/greifmasters/admin/setup">Setup</a><br />
+			<a href="/greifmasters/admin/setup">Setup new tournament</a><br />
 			<a href="/greifmasters/admin/logout">Logout</a>
 	</div>
+
+	<?php 
+	if ($_SESSION['admin'] == TRUE){
+	?>
+	<div class="navBox">
+		<div class="navHeading">Admin</div>
+
+			<a href="/greifmasters/admin/test_code">test_code.php</a><br />
+			<a href="/greifmasters/admin/debug_mode">Toggle debug mode</a><br />
+			<a href="/greifmasters/session_destroy.php">destroy session</a><br />
+			<a href="/greifmasters/admin/settings">Settings</a><br />
+	</div>
+	
+	<?php 
+	}
+	?>
 </div>

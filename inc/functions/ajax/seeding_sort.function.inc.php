@@ -3,9 +3,9 @@ parse_str($_POST['data']);
 mysql_connect('localhost', 'root');
 mysql_select_db('greifmasters');
 
-for ($i = 0; $i < count($ajax_list); $i++) {
-	if(is_int($i)) {
-		$query = "UPDATE seeding SET value = '$i' WHERE id = '$ajax_list[$i]'";
+for ($offset_count = 0; $offset_count < count($ajax_list); $offset_count++) {
+	if(is_int($offset_count)) {
+		$query = "UPDATE seeding SET value = '$offset_count' WHERE id = '$ajax_list[$offset_count]'";
 		mysql_query($query);
 		#zu updaten: team_id
 	}

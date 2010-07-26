@@ -41,18 +41,18 @@ if (isset($_SESSION['temp']['bracket']['nextstep'])){
 					}
 					
 					$groups = array();
-					for ($i=0; $i<$numberofgroups; $i++){
-						$groups[] = $letters[$i];
+					for ($offset_count=0; $offset_count<$numberofgroups; $offset_count++){
+						$groups[] = $letters[$offset_count];
 					}
 					shuffle($registered_teams);
 					
-					$i=0;
+					$offset_count=0;
 					foreach ($registered_teams as $team){
-						if ($i >= sizeof($groups)){$i=0;}
+						if ($offset_count >= sizeof($groups)){$offset_count=0;}
 						$instanz = new registration();
 						$instanz->load_entry($team['reg_id']);
-						$instanz->set_group_assignment($groups[$i]);
-						$i++;
+						$instanz->set_group_assignment($groups[$offset_count]);
+						$offset_count++;
 					}
 					
 					$bracket = new bracket();

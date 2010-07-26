@@ -9,7 +9,7 @@ $end_time_m = new time_dropdown_element('end_time_m', 'm');
 
 $courts = new court();
 $result = $courts->list_entries();
-$i=1;
+$offset_count=1;
 
 
 ?>
@@ -43,7 +43,7 @@ $i=1;
 					echo'
 						<tr>
 							<td>
-								<input type="checkbox" name="court_'.$i.'" value="'.$court['id'].'">
+								<input type="checkbox" name="court_'.$offset_count.'" value="'.$court['id'].'">
 							</td>
 							<td>
 								'.$court['name'].'
@@ -54,7 +54,7 @@ $i=1;
 						</tr>
 					';
 					
-					$i++;
+					$offset_count++;
 				}
 			
 			

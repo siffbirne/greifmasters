@@ -15,20 +15,18 @@
 
 			
 			echo
-				'<p><a href="'.BASE.'/play_tournament/brackets/'.$_SESSION['bracket_id'].'">Ranking</a><br />
-				<a href="'.BASE.'/play_tournament/brackets/'.$_SESSION['bracket_id'].'/delete">delete bracket</a></p>
+				'<p><a href="'.BASE.'/play_tournament/brackets/'.$_SESSION['bracket_id'].'">Ranking</a></p>
 				<p><a href="'.BASE.'/play_tournament/matches/upc">schedule</a><br />
+				<a href="'.BASE.'/play_tournament/matches/ong">now playing</a><br />
 				<a href="'.BASE.'/play_tournament/matches/fin">finished matches</a><br />
 				</p>
 				<p>
-				<a href="'.BASE.'/play_tournament/matches/ong">now playing</a>
-				</p>
-				<p>
-				<a href="'.BASE.'/play_tournament/brackets/'.$_SESSION['bracket_id'].'/settings">Bracket settings</a>
+				<a href="'.BASE.'/play_tournament/brackets/'.$_SESSION['bracket_id'].'/settings">Bracket settings</a><br />
+				<a href="'.BASE.'/play_tournament/brackets/'.$_SESSION['bracket_id'].'/delete">delete bracket</a>
 				</p>
 				<p>
 				<!--<a href="#" onclick=\'window.open("/greifmasters/cont/playtournament/display_output/display_output_800x600.php?b='.$_SESSION['bracket_id'].'","GREIFMASTERS 2010","width=800, height=600, status=no, scrollbars=no, resizable=no")\'>display output</a>-->
-				<div id="display_output">display output</div>
+				<!--<div id="display_output">display output</div>-->
 				</p>
 				</div>';
 		}

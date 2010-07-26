@@ -1,4 +1,8 @@
 <?php
+
+#@FIXME: what is this???
+
+
 require "inc/classes/karlsruher_system.class.php";
 $bracket = new karlsruher_system();
 $bracket->load_entry($_SESSION['bracket_id']);
