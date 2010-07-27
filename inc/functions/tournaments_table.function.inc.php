@@ -2,49 +2,34 @@
 
 function tournaments_table($ong_upc='', $query_extension=''){
 
-	$tournaments = array();
-
-	$query = "
-		SELECT
-			id,
-			name,
-			city,
-			DATE_FORMAT(begin,'%d.%m.%Y') AS begin_date,
-			DATE_FORMAT(end,'%d.%m.%Y') AS end_date,
-			status
-		FROM
-			tournaments
-	";
-
 
 	if ($ong_upc != ''){
 
 		switch ($ong_upc) {
 
 			case 'ong':
-				$query .= query_extension("WHERE", "status=2");
+				$where_clause = 'status=2';
 			break;
 
 			case 'upc':
-				$query .= query_extension("WHERE", "status<2");
+				$where_clause = 'status<2';
 			break;
 
 		}
 
 	}
 
-
-	$result = mysql_query ( $query ) or die ( mysql_error () );
-
-	while ($data = mysql_fetch_assoc($result)){
-
-		array_push($tournaments, $data);
-
-	}
-
-
-
-	#echo $query;
+	$tournaments = new tournament();
+	$tournaments = $tournaments->select(
+		"id,
+		name,
+		city,
+		DATE_FORMAT(begin,'%d.%m.%Y') AS begin_date,
+		DATE_FORMAT(end,'%d.%m.%Y') AS end_date,
+		status",
+		$where_clause
+		
+	);
 
 	echo '
 		<table>
@@ -58,7 +43,7 @@ function tournaments_table($ong_upc='', $query_extension=''){
 	';
 
 
-	if (mysql_affected_rows() == 0){
+	if ($tournaments == FALSE){
 			echo end_table(5);
 			return;
 	}

@@ -9,14 +9,14 @@ error_reporting(E_ALL);
 session_start ();
 
 
-#debug mode below
+
 $_SESSION['admin']=TRUE;
 $_SESSION['user'] = 2;
 
-
+require 'inc/functions.inc.php';
 
 if (! isset ( $_SESSION ['user'] )) {
-	header ( "Location: login.php" );
+	header ( "Location: ".PAGE_ROOT."/login.php" );
 	exit ();
 }
 
@@ -30,12 +30,9 @@ if (isset ( $_GET ['logout'] ) && $_GET ['logout'] == 1) {
 
 
 
-require 'inc/functions.inc.php';
 
 
-function __autoload($class_name) {
-    require_once 'inc/classes/' . $class_name . '.class.php';
-}
+
 
 
 
@@ -133,32 +130,38 @@ if ($_SESSION['admin'] == TRUE){
 
 
 
-$contents = ob_get_contents();
+$main_content = ob_get_contents();
 ob_end_clean();
 
-if(!$noTemplates) {
-	if ($_SESSION['debug_mode']== TRUE){
-		echo"get: "; var_dump ($_GET);echo"<br>";
-		echo"post: "; var_dump ($_POST);echo"<br>";
-		echo"session: "; var_dump ($_SESSION);echo"<br>";
-	}
 
-	include TPL_INCLUDE_PATH . 'head.tpl.php';
+
+if (!$notemplates){
+	
+	$page_title = 'Greifmasters Tournament Management';
 
 	if ($navigation != '') {
-		include TPL_INCLUDE_PATH . $navigation;
+		$nav_file = TPL_INCLUDE_PATH . $navigation;
 	}else{
-		include TPL_INCLUDE_PATH . 'navigation.tpl.php';
+		$nav_file = TPL_INCLUDE_PATH . 'navigation.tpl.php';
 	}
+	
+	ob_start();
+	include $nav_file;
+	$col1_content = ob_get_contents();
+	ob_end_clean();
+	
+	$col2_content = $main_content;
+	
+	$page_footer = 'Greifmasters Tournament Management v0.2, &copy; 2010 Max Thomas';
+	if ($_SESSION['debug_mode']== TRUE){
+		$page_footer = "get: ".print_r ($_GET, true)."<br>".
+		"post: ".print_r ($_POST, true)."<br>".
+		"session: ".print_r  ($_SESSION, true)."<br>";
+	}
+	
+	include 'inc/tpl/standard.tpl.php';
 
-	echo '<div id="contentContainer">';
-}
-
-echo $contents;
-
-if(!$noTemplates)
-{
-	echo '</div>';
-	include TPL_INCLUDE_PATH . 'bottom.tpl.php';
+}else{
+	echo $main_content;
 }
 ?>

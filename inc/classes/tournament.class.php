@@ -34,11 +34,17 @@ class tournament extends db {
 		return $this->city;
 	}
 	
-	public function get_begin(){
+	public function get_begin($format_output = FALSE){
+		if ($format_output == TRUE){
+			return date('d.m.Y', strtotime($this->begin));
+		}
 		return $this->begin;
 	}
 	
-	public function get_end(){
+	public function get_end($format_output = FALSE){
+		if ($format_output == TRUE){
+			return date('d.m.Y', strtotime($this->end));
+		}
 		return $this->end;
 	}
 	

@@ -319,6 +319,108 @@ class bracket extends db {
 	public function process_finished_match(){
 		return TRUE;
 	}
+	
+	public function get_match_results(){
+		#@todo: ugly!
+		
+		
+		echo '
+		<table class="ranking">
+			<tr>
+				<!--		<th>Court</th>-->
+				<th>Team 1</th>
+				<th>Team 2</th>
+				<th>Score</th>
+				<th>Time</th>
+		';
+		if (AUTHORIZED == TRUE){
+			echo'
+				<th>Action</th>
+			';
+		}
+		
+	echo '</tr>';
+	
+		$query = "
+		SELECT
+			t1.name AS team1,
+			t2.name AS team2,
+			t1.id AS team1_id,
+			t2.id AS team2_id,
+			DATE_FORMAT(m.datetime, '%a, %H:%i') AS time,
+			m.id AS match_id,
+			(
+				SELECT
+					count(*)
+				FROM
+					goals
+				WHERE
+					((team_id = t1.id AND regular = '1')
+					OR
+					(team_id != t1.id AND regular = '0'))
+				AND
+					match_id = m.id
+			) AS goals1,
+			(
+				SELECT
+					count(*)
+				FROM
+					goals
+				WHERE
+					((team_id = t2.id AND regular = '1')
+					OR
+					(team_id != t2.id AND regular = '0'))
+				AND
+					match_id = m.id
+			) AS goals2
+		FROM
+			matches AS m
+			INNER JOIN teams AS t1 ON t1.id = m.team1
+			INNER JOIN teams AS t2 ON t2.id = m.team2
+		WHERE m.status = 1
+		AND m.bracket_id = '" . $this->id . "'
+		ORDER BY datetime DESC
+		
+	";
+	
+	$matches = new match ( );
+	$matches = $matches->fetch_results ( $query );
+	
+	foreach ( $matches as $match ) {
+		
+		echo '
+		<tr>
+
+			<td>';
+		
+		if ($match ['goals1'] > $match ['goals2']) {
+			echo '<b>' . $match ['team1'] . '</b>';
+		} else {
+			echo $match ['team1'];
+		}
+		
+		echo '</td><td>';
+		
+		if ($match ['goals2'] > $match ['goals1']) {
+			echo '<b>' . $match ['team2'] . '</b>';
+		} else {
+			echo $match ['team2'];
+		}
+		
+		echo '
+			</td>
+			<td>' . $match ['goals1'] . ':' . $match ['goals2'] . '</td>
+			<td>' . $match ['time'] . '</td>';
+		if (AUTHORIZED == TRUE){
+			echo'
+			<td><a href="' . BASE . '/play_tournament/matches/' . $match ['match_id'] . '"><img src="' . GFX_EDIT . '" /></a></td>
+			';
+		}
+		echo'</tr>';
+	
+	}
+	echo '</table>';
+	}
 }
 
 ?>

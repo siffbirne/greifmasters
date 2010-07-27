@@ -1,10 +1,16 @@
 <?php
 
+function __autoload($class_name) {
+    require_once 'inc/classes/' . $class_name . '.class.php';
+}
+
+
+
 require 'functions/forms.function.inc.php';
 
 #require 'functions/error_handler.function.inc.php';
 
-require 'constants.inc.php';
+require 'config.inc.php';
 #require 'db.inc.php';
 require 'variables.inc.php';
 

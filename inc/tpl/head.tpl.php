@@ -17,4 +17,5 @@
 </head>
 <body onload="init();" onunload="StopTimer();">
 <audio id="horn" src="/greifmasters/horn.wav" autobuffer="true">No audio</audio>
+<div id="header">&nbsp;</div>
 <div id="pageframe">

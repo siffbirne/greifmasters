@@ -1,4 +1,5 @@
 <?php
+#@todo: deprecated
 
 function query_extension ($clause, $arguments, $where_clause_started=FALSE, $previous_arguments=FALSE){
 	

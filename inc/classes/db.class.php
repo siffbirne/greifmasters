@@ -10,7 +10,7 @@ class db extends mysqli {
 
 	function __construct($table) {
 		
-		parent::__construct('localhost','root','','greifmasters');
+		parent::__construct(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 		 
 			if (mysqli_connect_errno()) {
 			  printf(
