@@ -67,10 +67,106 @@ class team extends db{
 		
 		$players = parent::fetch_results($query);
 		return $players[0];
+		
+		#@todo: proper array would be much more sensible. array(array(), array(), array())
 	
 		
 	}
 	
+	public function get_brackets($tournament = ''){
+		$query = "
+			SELECT
+				b.id, b.name
+			FROM
+				gm_brackets AS b
+				INNER JOIN gm_tournaments AS t ON t.id = b.tournament_id
+				INNER JOIN gm_bracket_qualifications AS q ON q.bracket_id = b.id
+			WHERE q.team_id = '$this->id'
+		";
+		if ($tournament != ''){
+			$query .= " AND t.id = '$tournament'";
+		}
+		return self::fetch_results($query);
+	}
+	
+	public function get_matches($bracket = '', $tournament = ''){
+			$query = "
+			SELECT
+				t1.name AS team1,
+				t2.name AS team2,
+				t1.id AS team1_id,
+				t2.id AS team2_id,
+				DATE_FORMAT(m.datetime, '%a, %H:%i') AS time,
+				m.id AS match_id,
+				m.bracket_id AS bracket_id,
+				t.id AS tournament_id,
+				(
+					SELECT
+						count(*)
+					FROM
+						gm_goals
+					WHERE
+						((team_id = t1.id AND regular = '1')
+						OR
+						(team_id != t1.id AND regular = '0'))
+					AND
+						match_id = m.id
+				) AS goals1,
+				(
+					SELECT
+						count(*)
+					FROM
+						gm_goals
+					WHERE
+						((team_id = t2.id AND regular = '1')
+						OR
+						(team_id != t2.id AND regular = '0'))
+					AND
+						match_id = m.id
+				) AS goals2
+			FROM
+				gm_matches AS m
+				INNER JOIN gm_teams AS t1 ON t1.id = m.team1
+				INNER JOIN gm_teams AS t2 ON t2.id = m.team2
+				INNER JOIN gm_brackets AS b ON b.id = m.bracket_id
+				INNER JOIN gm_tournaments AS t ON t.id = b.tournament_id
+			WHERE (t1.id = '" . $this->id . "' OR t2.id = '" . $this->id . "')			
+			";
+			
+			if ($bracket != ''){
+				$query .= " AND bracket_id = '$bracket'";
+			}elseif($tournament != ''){
+				$query .= " AND tournament_id = '$tournament'";
+			}
+			$query .= '	ORDER BY datetime DESC';
+			
+			return self::fetch_results($query);
+	}
+	
+	public function get_goals($bracket = '', $tournament = ''){
+		
+		$query = "
+			SELECT
+				g.id AS goal_id, g.player_id AS player_id, p.name AS player_name, g.match_id AS match_id, t.name AS opponent
+			FROM gm_goals AS g
+			INNER JOIN gm_players AS p ON p.id = g.player_id
+			INNER JOIN gm_matches AS m ON m.id = g.match_id
+			INNER JOIN gm_teams AS t ON t.id = 
+			INNER JOIN gm_brackets AS b ON m.bracket_id = b.id
+			INNER JOIN gm_tournaments AS t ON t.id = b.tournament_id
+			WHERE g.team_id = '" . $this->id . "'
+		";
+		
+		if ($bracket != ''){
+				$query .= " AND m.bracket_id = '$bracket'";
+			}elseif($tournament != ''){
+				$query .= " AND b.tournament_id = '$tournament'";
+			}
+		
+		
+		return self::fetch_results($query);
+		
+	}
 
 	public function store($team_name, $city, $player1, $player2, $player3, $logo='') {
 

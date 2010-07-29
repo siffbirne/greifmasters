@@ -83,6 +83,26 @@ $bracket->get_match_results();
 } elseif (isset ( $_GET ['p2'] ) && $_GET ['p2'] == 'upc') {
 	
 	if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'rearrange') {
+		
+		if (isset ( $_GET ['p4'] ) && $_GET ['p4'] == 'sort'){
+			
+			
+			parse_str($_POST['data']);
+			
+			#require_once ('../../functions.inc.php');
+			$db = new db('upc_matches');
+			
+			for ($offset_count = 0; $offset_count < count($ajax_list); $offset_count++) {
+				if(is_int($offset_count)) {
+					$db->update("match_order = '$offset_count'", "match_id = '$ajax_list[$offset_count]'");
+				}
+				else {
+				exit;
+				}
+			}
+			
+		}
+		
 		echo 'courts can not be changed in this view yet. coming soon...';
 		
 		if (isset ( $_POST ['additional_info'] )) {
@@ -330,7 +350,7 @@ Sortable.create("ajax_list",
 	{
 	onUpdate:function()
 		{
-		new Ajax.Request('<?= PAGE_ROOT ?>/inc/functions/ajax/matches_sort.function.inc.php',
+		new Ajax.Request('<?= BASE ?>/play_tournament/matches/upc/rearrange/sort',
 			{
 			method: "post",
 			parameters: {data: Sortable.serialize("ajax_list")}
@@ -400,8 +420,6 @@ Sortable.create("ajax_list",
 	}
 	
 	$offset_count = 0;
-	$ready_signal_offset = 3;
-	#@todo: ready signal: teams for the next 3 matches are meant to report ready to the ref. number should be adjustable of course
 	
 
 	$tournament = new tournament ( );
@@ -461,7 +479,7 @@ Sortable.create("ajax_list",
 			<td>' . $court ['name'] . '</td>
 			<td>';
 		
-		if ($offset_count < $ready_signal_offset) {
+		if (READY_SIGNAL_OFFSET != FALSE && $offset_count < READY_SIGNAL_OFFSET) {
 			if ($upc_match ['ready_team1'] == 1) {
 				echo '<span class="green">' . $upc_match ['team1'] . '</span>';
 			} else {
@@ -474,7 +492,7 @@ Sortable.create("ajax_list",
 		echo '
 			</td><td>';
 		
-		if ($offset_count < $ready_signal_offset) {
+		if (READY_SIGNAL_OFFSET != FALSE && $offset_count < READY_SIGNAL_OFFSET) {
 			if ($upc_match ['ready_team2'] == 1) {
 				echo '<span class="green">' . $upc_match ['team2'] . '</span>';
 			} else {

@@ -3,6 +3,23 @@ $bracket_code = 'karlsruher_system';
 $bracket_type = 'Karlsruher System';
 $steps = 2;
 
+if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'sort'){
+			
+			
+			parse_str($_POST['data']);
+
+			$db = new db('seeding');
+			
+			for ($offset_count = 0; $offset_count < count($ajax_list); $offset_count++) {
+				if(is_int($offset_count)) {
+					$db->update("value = '$offset_count'", "id = '$ajax_list[$offset_count]'");
+				}
+				else {
+				exit;
+				}
+			}
+			
+}
 
 
 if (isset($_SESSION['temp']['bracket'])){
@@ -84,8 +101,6 @@ if (isset($_SESSION['temp']['bracket']['nextstep'])){
 		<option>6</option>
 		<option>7</option>
 		<option>8</option>
-		<option>9</option>
-		<option>10</option>
 	</select><br />
 	
 	set order of teams:<br /><br />
@@ -113,7 +128,7 @@ if (isset($_SESSION['temp']['bracket']['nextstep'])){
 		{
 		onUpdate:function()
 			{
-			new Ajax.Request('/greifmasters/inc/functions/ajax/seeding_sort.function.inc.php',
+			new Ajax.Request('<?= BASE ?>/play_tournament/brackets/new/sort',
 				{
 				method: "post",
 				parameters: {data: Sortable.serialize("ajax_list")}

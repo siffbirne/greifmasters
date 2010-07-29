@@ -41,6 +41,7 @@
 								echo '
 									<p>
 								<a href="'.BASE.'/play_tournament/brackets/'.$_SESSION['bracket_id'].'/settings">Bracket settings</a><br />
+								<a href="'.BASE.'/play_tournament/brackets/'.$_SESSION['bracket_id'].'/prints">Prints</a><br />
 								<a href="'.BASE.'/play_tournament/brackets/'.$_SESSION['bracket_id'].'/delete">delete bracket</a>
 								</p>';
 							}

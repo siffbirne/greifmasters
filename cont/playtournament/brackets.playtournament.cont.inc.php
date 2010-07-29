@@ -80,8 +80,7 @@ if(isset($_GET['p2']) && is_numeric($_GET['p2'])){
 		}
 		return;
 	}
-	
-	
+
 	
 	
 //	$status = $bracket->get_status();

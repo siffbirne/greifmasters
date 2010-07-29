@@ -81,7 +81,7 @@ class qualifications extends bracket{
 
 		$query="
 			INSERT INTO 
-				brackets (tournament_id, mode, status, timelimit_policy)
+				gm_brackets (tournament_id, mode, status, timelimit_policy)
 			VALUES
 				('$this->tournament_id', '$this->mode', '0', '0')
 		";
@@ -96,7 +96,7 @@ class qualifications extends bracket{
 			
 			$query = "
 				INSERT INTO 
-					matches (bracket_id, team1, team2)
+					gm_matches (bracket_id, team1, team2)
 				VALUES
 					('$this->bracket_id', '$match[0]', '$match[1]')
 			";
@@ -107,7 +107,7 @@ class qualifications extends bracket{
 			
 			$query="
 				INSERT INTO 
-					upc_matches (bracket_id, match_id)
+					gm_upc_matches (bracket_id, match_id)
 				VALUES
 					('$this->bracket_id', '$match_id')
 			";

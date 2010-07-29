@@ -388,28 +388,13 @@ class karlsruher_system extends bracket {
 		
 		
 		FROM
-			gm_teams AS t
+		gm_bracket_qualifications AS q
+		INNER JOIN gm_teams AS t ON q.team_id = t.id
 		INNER JOIN gm_players AS p1 ON t.player1 = p1.id
 		INNER JOIN gm_players AS p2 ON t.player2 = p2.id
 		INNER JOIN gm_players AS p3 ON t.player3 = p3.id
 		WHERE
-			t.id IN (
-				SELECT
-					team1
-				FROM
-					gm_matches
-				WHERE
-					bracket_id='".$this->id."'
-			)
-		OR
-			t.id IN (
-				SELECT
-					team2
-				FROM
-					gm_matches
-				WHERE
-					bracket_id='".$this->id."'
-			)
+			q.bracket_id='".$this->id."'
 	";
 		
 	
@@ -438,7 +423,7 @@ class karlsruher_system extends bracket {
 	public function draw_ranklist(){
 		
 		$results = self::get_ranking();
-		
+
 		echo '
 			<table class="ranking">'."\n".'
 				<tr><th>Rank</th><th>Team name</th><th>Points</th><th>won</th><th>lost</th><th>draw</th><th>goal difference</th><th>goals</th><th>goals against</th><th>games played</th></tr>'."\n".'

@@ -50,7 +50,7 @@ mysql_select_db('greifmasters');
 	
 	
 foreach($theTeams as $team){
-	$query="INSERT INTO teams (name, city, player1, player2, player3, logo, created_by) VALUES ('$team[0]', '$team[1]', '$team[2]', '$team[3]', '$team[4]', '$team[5]', '2')";
+	$query="INSERT INTO gm_teams (name, city, player1, player2, player3, logo, created_by) VALUES ('$team[0]', '$team[1]', '$team[2]', '$team[3]', '$team[4]', '$team[5]', '2')";
 	mysql_query($query);
 }
 		

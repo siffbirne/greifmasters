@@ -1,29 +1,24 @@
 <?php
-
+$messung = microtime();
+$messung = explode (' ', $messung);
+$messung = $messung[1] + $messung[0];
+$beginn = $messung; 
 
 #FIXME: not one single form is checked. neither if it is completed, nor if it contains forbidden characters. xss, sql-inj, ... !!
 
 error_reporting(E_ALL ^ E_NOTICE);
-
-
 session_start ();
-
+ob_start();
 
 if ($_SESSION['user'] == 2){$_SESSION['admin']=TRUE;}
 
 require 'inc/functions.inc.php';
 
-ob_start();
-
-
 
 if (isset($_SESSION['notification'])){
-
 	echo notifications($_SESSION['notification']);
 	unset ($_SESSION['notification']);
-
 }
-
 
 
 if (! isset ( $_SESSION ['user'] )) {
@@ -89,28 +84,34 @@ switch ($_SESSION['cat']) {
 		include 'test_code.php';
 	break;
 
+	case 'debug_mode':
+		
+		if ($_SESSION['admin'] == TRUE){
+			if ($_SESSION['debug_mode']){
+				$_SESSION['debug_mode'] = FALSE;
+			}else{
+				$_SESSION['debug_mode'] = TRUE;
+			}	
+		}
+		
+		include 'cont/general.php';
+	break;
+	
 	default :
 		include 'cont/general.php';
 	break;
 
 }
 
-if ($_SESSION['admin'] == TRUE){
-	if ($_SESSION['cat'] == 'debug_mode'){
-		if ($_SESSION['debug_mode']){
-			$_SESSION['debug_mode'] = FALSE;
-		}else{
-			$_SESSION['debug_mode'] = TRUE;
-		}
-		include 'cont/general.php';
-	}
-}
-
-
 
 $main_content = ob_get_contents();
 ob_end_clean();
 
+$messung = microtime();
+$messung = explode(' ', $messung);
+$messung = $messung[1] + $messung[0];
+$ende = $messung;
+$total_time = round(($ende - $beginn), 4);
 
 
 if (!$notemplates){
@@ -135,7 +136,8 @@ if (!$notemplates){
 	if ($_SESSION['debug_mode']== TRUE){
 		$page_footer = "get: ".print_r ($_GET, true)."<br>".
 		"post: ".print_r ($_POST, true)."<br>".
-		"session: ".print_r  ($_SESSION, true)."<br>";
+		"session: ".print_r  ($_SESSION, true)."<br>".
+		'<p>Page generated in '.$total_time.' seconds.</p>'."\n"; 
 	}
 	
 	include 'inc/tpl/standard.tpl.php';

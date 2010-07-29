@@ -22,6 +22,7 @@ if (isset($_GET['p1']) && is_numeric(htmlentities($_GET['p1']))){
 	// actions ----------------------------------------------------------------
 	if ($tournament->get_status()==0){
 		
+		
 
 		
 		if( isset ($_GET ['p2']) && $_GET ['p2'] == 'add_teams') {
@@ -49,7 +50,28 @@ if (isset($_GET['p1']) && is_numeric(htmlentities($_GET['p1']))){
 //			return;
 //		}
 //	}
-	
+	if( isset ($_GET ['p2']) && $_GET ['p2'] == 'teams') {
+			if( isset ($_GET ['p3']) && $_GET ['p3'] == 'unregister') {
+				$registration = new registration();
+				$registration->delete($_GET ['p4']);
+			}elseif( isset ($_GET ['p3']) && $_GET ['p3'] == 'details') {
+				
+				$team = new team();
+				$team->load_entry($_GET ['p4']);
+				
+				var_dump($team->get_goals());
+				var_dump($team->get_matches());
+				var_dump($team->get_brackets());
+				
+				
+				
+				
+			}else{
+				include 'cont/inc/tables/registered_teams.table.inc.php';
+				return;
+			}
+			
+		}
 	
 	if( isset ($_GET ['p2']) && $_GET ['p2'] == 'status') {
 		

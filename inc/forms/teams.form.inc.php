@@ -17,11 +17,12 @@ if (isset ( $_POST ['submit'] )) {
 		$team->update("name='$team_name', city='$city'", "id='".$_POST['update']."'");
 		
 		$players = $team->get_players();
+		for ($i=1; $i<=3; $i++){
+			$entry = new player();
+			$entry->load_entry($players['player'.$i.'_id']);
+			$entry->set_name($_POST['player'.$i]);
+		}
 		
-		$player = new db('players');
-		$player->query("UPDATE players SET name='".$_POST['player1']."' WHERE id='".$players['player1_id']."'");
-		$player->update("UPDATE players SET name='".$_POST['player2']."' WHERE id='".$players['player2_id']."'");
-		$player->update("UPDATE players SET name='".$_POST['player3']."' WHERE id='".$players['player3_id']."'");
 	}else{
 		$team = new team();
 		$team->store($team_name, $city, $player1, $player2, $player3);

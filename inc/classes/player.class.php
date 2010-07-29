@@ -44,24 +44,24 @@ class player extends db{
 	
 	
 	
-	public function set_name(){
-		
+	public function set_name($value){
+		self::update("name='$value'", "id='$this->id'");
 	}
 	
-	public function set_surname(){
-		
+	public function set_surname($value){
+		self::update("surname='$value'", "id='$this->id'");
 	}
 	
-	public function set_email(){
-		
+	public function set_email($value){
+		self::update("email='$value'", "id='$this->id'");
 	}
 	
-	public function set_tshirtsize(){
-		
+	public function set_tshirtsize($value){
+		self::update("tshirtsize='$value'", "id='$this->id'");
 	}
 	
-	public function set_nick(){
-		
+	public function set_nick($value){
+		self::update("nick='$value'", "id='$this->id'");
 	}
 
 	

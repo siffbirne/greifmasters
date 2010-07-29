@@ -11,6 +11,7 @@ require 'functions/forms.function.inc.php';
 #require 'functions/error_handler.function.inc.php';
 
 require 'config.inc.php';
+require 'settings.php';
 #require 'db.inc.php';
 require 'variables.inc.php';
 

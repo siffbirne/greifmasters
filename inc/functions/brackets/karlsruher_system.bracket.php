@@ -1,5 +1,5 @@
 <?php
-
+#@todo: deprecated
 function karlsruher_system($tournament_id){
 	
 	$start_time='2010-02-05 10:00:00';
@@ -56,7 +56,7 @@ $datetime=date("Y:m:d H:i:s", $time);
 		
 		$query="
 			INSERT INTO 
-				upc_matches (bracket_id, team1, team2)
+				gm_upc_matches (bracket_id, team1, team2)
 			VALUES
 				('".$_SESSION['bracket_id']."', '$match[0]', '$match[1]')
 		";
