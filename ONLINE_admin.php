@@ -9,11 +9,35 @@ error_reporting(E_ALL ^ E_NOTICE);
 session_start ();
 
 
+
+
 if ($_SESSION['user'] == 2){$_SESSION['admin']=TRUE;}
 
 require 'inc/functions.inc.php';
 
+
+
+if (isset ( $_GET ['logout'] ) && $_GET ['logout'] == 1) {
+	session_destroy ();
+	header ( "Location: $_SERVER[PHP_SELF]" );
+	exit ();
+}
+
+
+
+
+
+
+
+
+
+
+
 ob_start();
+
+
+
+
 
 
 
@@ -82,7 +106,7 @@ switch ($_SESSION['cat']) {
 	
 	case 'logout':
 		session_destroy();
-		header ( "Location: ".PAGE_ROOT."/admin.php" );
+		header ( "Location: ../login.php" );
 	break;
 	
 	case 'test_code':
@@ -115,7 +139,7 @@ ob_end_clean();
 
 if (!$notemplates){
 	
-	$page_title = 'Greifmasters Tournament Management v0.2';
+	$page_title = 'Greifmasters Tournament Management';
 
 	if ($navigation != '') {
 		$nav_file = TPL_INCLUDE_PATH . $navigation;
@@ -131,7 +155,7 @@ if (!$notemplates){
 	
 	$col2_content = $main_content;
 	
-	$page_footer = 'Greifmasters Tournament Management v0.2';
+	$page_footer = 'Greifmasters Tournament Management v0.2, &copy; 2010 Max Thomas';
 	if ($_SESSION['debug_mode']== TRUE){
 		$page_footer = "get: ".print_r ($_GET, true)."<br>".
 		"post: ".print_r ($_POST, true)."<br>".

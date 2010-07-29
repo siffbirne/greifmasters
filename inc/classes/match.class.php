@@ -106,21 +106,21 @@ class match extends db {
 		
 		parent::query("
 			DELETE FROM
-				upc_matches
+				gm_upc_matches
 			WHERE
 				match_id='$this->id'
 		");
 		
 		parent::query("
 			DELETE FROM
-				goals
+				gm_goals
 			WHERE
 				match_id = '$this->id'
 		");
 		
 		parent::query("
 			DELETE FROM
-				fouls
+				gm_fouls
 			WHERE
 				match_id = '$this->id'
 		");

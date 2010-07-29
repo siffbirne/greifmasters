@@ -136,10 +136,10 @@ $bracket->get_match_results();
 				m.team1 AS team1_id,
 				m.team2 AS team2_id
 			FROM
-				upc_matches AS u
-				INNER JOIN matches AS m ON m.id = u.match_id
-				INNER JOIN teams AS t1 ON m.team1 = t1.id
-				INNER JOIN teams AS t2 ON m.team2 = t2.id
+				gm_upc_matches AS u
+				INNER JOIN gm_matches AS m ON m.id = u.match_id
+				INNER JOIN gm_teams AS t1 ON m.team1 = t1.id
+				INNER JOIN gm_teams AS t2 ON m.team2 = t2.id
 			WHERE
 				m.bracket_id = '" . $_SESSION ['bracket_id'] . "'
 			ORDER BY u.match_order ASC, u.id ASC
@@ -323,14 +323,14 @@ $bracket->get_match_results();
 		}
 		
 		?>
-</ul>
 
+</ul>
 <script type="text/javascript">
 Sortable.create("ajax_list",
 	{
 	onUpdate:function()
 		{
-		new Ajax.Request('/greifmasters/inc/functions/ajax/matches_sort.function.inc.php',
+		new Ajax.Request('<?= PAGE_ROOT ?>/inc/functions/ajax/matches_sort.function.inc.php',
 			{
 			method: "post",
 			parameters: {data: Sortable.serialize("ajax_list")}
@@ -372,10 +372,10 @@ Sortable.create("ajax_list",
 			u.ready_team2 AS ready_team2,
 			u.court_id AS court
 		FROM
-			upc_matches AS u
-			INNER JOIN matches AS m ON m.id = u.match_id
-			INNER JOIN teams AS t1 ON m.team1 = t1.id
-			INNER JOIN teams AS t2 ON m.team2 = t2.id
+			gm_upc_matches AS u
+			INNER JOIN gm_matches AS m ON m.id = u.match_id
+			INNER JOIN gm_teams AS t1 ON m.team1 = t1.id
+			INNER JOIN gm_teams AS t2 ON m.team2 = t2.id
 		WHERE
 			m.bracket_id = '" . $_SESSION ['bracket_id'] . "'
 		ORDER BY u.match_order ASC, u.id ASC
@@ -425,9 +425,11 @@ Sortable.create("ajax_list",
 			
 			if (! $courts [$court_id]) {
 				$court ['name'] = '<span class="red">N/A</span>';
+				$courts [$court_id] ['count'] = 0;
 			} else {
 				$court = $courts [$court_id];
 				$courts [$court_id] ['count'] ++;
+				#@todo: achtung: beginnt immer bei 1
 			}
 			
 			$scheduled_time = $start + (($timelimit1 + $pause1) * 60 * $court ['count']);
@@ -442,9 +444,10 @@ Sortable.create("ajax_list",
 					$scheduled_time = strtotime ( $playing_times [$current_playing_time_index] ['begin'] );
 					$scheduled_time_formated = date ( 'D, H:i', $scheduled_time );
 					$start = $scheduled_time;
-					foreach ( $courts as $court ) {
-						$court ['count'] = 0;
+					foreach ( $courts as $key=>$row ) {
+						$courts[$key]['count'] = 0;
 					}
+					$courts [$court_id] ['count'] ++;
 				}
 			}
 		} else {

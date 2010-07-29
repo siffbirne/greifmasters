@@ -32,7 +32,7 @@ class registration extends db{
 	
 	
 	public function store($team_id, $tournament_id){
-
+#@FIXME: registration full?!
 		parent::store(
 			'team_id, tournament_id, registered_by, registered_date',
 			"'$team_id','".$_SESSION['tournament_id']."','".$_SESSION['user']."',NOW()"
@@ -57,8 +57,8 @@ class registration extends db{
 			SELECT
 				t.id, t.name, t.city, r.id AS reg_id
 			FROM
-				teams AS t
-				INNER JOIN registration AS r ON t.id = r.team_id
+				gm_teams AS t
+				INNER JOIN gm_registration AS r ON t.id = r.team_id
 			WHERE r.tournament_id='$tournament_id'
 		";
 		

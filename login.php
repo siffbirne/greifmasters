@@ -12,21 +12,20 @@ if (isset ( $_GET ['login'] ) && $_GET ['login'] == 1) {
 
 		$user = strip_tags($_POST ['user']);
 		$pw = strip_tags($_POST ['pw']);
+		
+		$db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-		mysql_connect('localhost', 'root');
-		mysql_select_db('greifmasters');
+		$query = "SELECT * FROM gm_users WHERE user='$user'";
+		$result = $db->query($query);
 
-		$query = "SELECT * FROM users WHERE user='$user'";
-		$pwcheck = mysql_query ( $query );
-
-		while ( $row = mysql_fetch_array ( $pwcheck ) ) {
-			$pwdb = $row ['pass'];
-			$salt = $row ['salt'];
-			$user_id = $row ['id'];
-			$rights = $row['rights'];
+		while ( $row = $result->fetch_object() ) {
+			$pwdb = $row->pass;
+			$salt = $row->salt;
+			$user_id = $row->id;
+			$rights = $row->rights;
 		}
 
-		if (mysql_affected_rows () == 0) {
+		if ($result->num_rows == 0) {
 
 			echo "ERROR! Invalid user name.<br />";
 

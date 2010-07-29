@@ -2,17 +2,22 @@
 
 #include 'db.inc.php';
 
-define ('BASE', '/greifmasters/admin');
-define ('PAGE_ROOT', '/greifmasters');
+define ('PAGE_ROOT', 'http://www.bikepunx.de/greifmasters');
+define ('BASE', PAGE_ROOT.'/admin');
 define ('SELF', $_SERVER['REQUEST_URI']);
 
+//$query = ("SELECT * FROM settings");
+//$result = mysql_query($query);
+//$settings = mysql_fetch_assoc($result);
+//
+//unset($query, $result);
 
 // database stuff
 
-define ('DB_HOST', 'localhost');
-define ('DB_USER', 'root');
-define ('DB_PASS', '');
-define ('DB_NAME', 'greifmasters');
+define ('DB_HOST', 'rdbms.strato.de');
+define ('DB_USER', 'U218862');
+define ('DB_PASS', '23thomas23');
+define ('DB_NAME', 'DB218862');
 define ('DB_TABLE_PREFIX', 'gm_');
 
 define ('AUTHORIZED', FALSE);

@@ -10,10 +10,10 @@
 			u.ready_team1 AS ready_team1,
 			u.ready_team2 AS ready_team2
 		FROM
-			upc_matches AS u
-			INNER JOIN matches AS m ON m.id = u.match_id
-			INNER JOIN teams AS t1 ON m.team1 = t1.id
-			INNER JOIN teams AS t2 ON m.team2 = t2.id
+			gm_upc_matches AS u
+			INNER JOIN gm_matches AS m ON m.id = u.match_id
+			INNER JOIN gm_teams AS t1 ON m.team1 = t1.id
+			INNER JOIN gm_teams AS t2 ON m.team2 = t2.id
 		WHERE
 			m.bracket_id = '".$_SESSION['bracket_id']."'
 		ORDER BY u.match_order ASC, u.id ASC LIMIT 6

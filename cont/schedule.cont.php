@@ -4,7 +4,7 @@ $query = "
 			SELECT
 				id
 			FROM
-				teams
+				gm_teams
 			WHERE id='$id'
 		";
 

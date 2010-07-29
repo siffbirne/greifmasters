@@ -19,7 +19,7 @@ set order of teams:<br /><br />
 	
 	$db = new db('seeding');
 	
-    $result = $db->fetch_results("SELECT * FROM seeding ORDER BY value");
+    $result = $db->fetch_results("SELECT * FROM gm_seeding ORDER BY value");
 	$offset_count = 1;
     foreach ($result as $data)
     {

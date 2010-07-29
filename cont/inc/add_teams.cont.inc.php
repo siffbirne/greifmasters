@@ -30,7 +30,7 @@ if (isset ( $_POST ['submit'] ) && $_POST ['submit'] == 1) {
 			SELECT
 				id, name
 			FROM
-				teams
+				gm_teams
 		";
 	
 	$result = mysql_query ( $query ) or die ( mysql_error () );

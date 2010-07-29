@@ -1,7 +1,8 @@
 <?php
 
 # just some useless file for quick testing
-
+for ($i=0; $i<20; $i++){$team = new team();
+$team->store("test team $i", "city $i", "dummy1", "dummy2", "dummy3");}
 
 $query = "
 		SELECT

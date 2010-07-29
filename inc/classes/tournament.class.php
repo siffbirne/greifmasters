@@ -86,7 +86,7 @@ class tournament extends db {
 			SELECT
 				id, court, begin, end
 			FROM
-				playing_times
+				gm_playing_times
 			WHERE
 				tournament_id = '".$_SESSION['tournament_id']."'
 			ORDER BY begin ASC
@@ -114,8 +114,8 @@ class tournament extends db {
 			SELECT
 				t.id, t.name, t.city, r.id AS reg_id
 			FROM
-				teams AS t
-				INNER JOIN registration AS r ON t.id = r.team_id
+				gm_teams AS t
+				INNER JOIN gm_registration AS r ON t.id = r.team_id
 			WHERE r.tournament_id='$this->id'
 		";
 		

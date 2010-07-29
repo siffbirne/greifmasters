@@ -11,7 +11,7 @@ if (
 
 	$form_entries = $_POST;
 	
-	var_dump($form_entries);
+
 	$new_tournament = new tournament();
 	$new_tournament->store(
 		$form_entries['name'],
@@ -21,8 +21,8 @@ if (
 		$form_entries['spots_available']
 	);
 		
-	$_SESSION['notification']=1;
-//	header('Location: '.BASE.'/tournament/show/'.$new_tournament->get_id());
+
+	header('Location: '.BASE.'/tournament/'.$new_tournament->get_id());
 	
 	return;
 		

@@ -58,10 +58,10 @@ class team extends db{
 				p3.id AS player3_id,
 				p3.name AS player3
 			FROM
-				teams AS t
-				INNER JOIN players AS p1 ON t.player1 = p1.id
-				INNER JOIN players AS p2 ON t.player2 = p2.id
-				INNER JOIN players AS p3 ON t.player3 = p3.id
+				gm_teams AS t
+				INNER JOIN gm_players AS p1 ON t.player1 = p1.id
+				INNER JOIN gm_players AS p2 ON t.player2 = p2.id
+				INNER JOIN gm_players AS p3 ON t.player3 = p3.id
 			WHERE t.id = '$this->id'
 		";
 		
@@ -120,10 +120,10 @@ class team extends db{
 				t.created_by
 
 			FROM
-				teams AS t
-			INNER JOIN players AS p1 ON t.player1 = p1.id
-			INNER JOIN players AS p2 ON t.player2 = p2.id
-			INNER JOIN players AS p3 ON t.player3 = p3.id
+				gm_teams AS t
+			INNER JOIN gm_players AS p1 ON t.player1 = p1.id
+			INNER JOIN gm_players AS p2 ON t.player2 = p2.id
+			INNER JOIN gm_players AS p3 ON t.player3 = p3.id
 			WHERE t.id = '$id'
 			AND p1.id != p2.id
 			AND p1.id != p3.id

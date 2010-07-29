@@ -127,7 +127,7 @@ class karlsruher_system extends bracket {
 			SELECT
 				count(*)
 			FROM
-				matches AS m
+				gm_matches AS m
 			WHERE
 				(team1 = t.id
 				OR
@@ -139,7 +139,7 @@ class karlsruher_system extends bracket {
 					SELECT
 						count(*)
 					FROM
-						goals
+						gm_goals
 					WHERE(
 						((team_id = t.id AND regular = '1')
 						OR
@@ -151,7 +151,7 @@ class karlsruher_system extends bracket {
 					SELECT
 						count(*)
 					FROM
-						goals
+						gm_goals
 					WHERE(
 						((team_id != t.id AND regular = '1')
 						OR
@@ -172,7 +172,7 @@ class karlsruher_system extends bracket {
 			(SELECT
 				count(*) * 3
 			FROM
-				matches AS m
+				gm_matches AS m
 			WHERE
 				(team1 = t.id
 				OR
@@ -184,7 +184,7 @@ class karlsruher_system extends bracket {
 					SELECT
 						count(*)
 					FROM
-						goals
+						gm_goals
 					WHERE(
 						((team_id = t.id AND regular = '1')
 						OR
@@ -196,7 +196,7 @@ class karlsruher_system extends bracket {
 					SELECT
 						count(*)
 					FROM
-						goals
+						gm_goals
 					WHERE(
 						((team_id != t.id AND regular = '1')
 						OR
@@ -215,7 +215,7 @@ class karlsruher_system extends bracket {
 			SELECT
 				count(*)
 			FROM
-				matches AS m
+				gm_matches AS m
 			WHERE
 				(team1 = t.id
 				OR
@@ -223,7 +223,7 @@ class karlsruher_system extends bracket {
 			AND
 				status ='1'
 			AND
-				(SELECT count(*) FROM goals WHERE team_id = t.id AND match_id = m.id) = (SELECT count(*) FROM goals WHERE team_id != t.id AND match_id = m.id)
+				(SELECT count(*) FROM gm_goals WHERE team_id = t.id AND match_id = m.id) = (SELECT count(*) FROM gm_goals WHERE team_id != t.id AND match_id = m.id)
 			AND
 				bracket_id = '".$this->id."'
 		)
@@ -240,7 +240,7 @@ class karlsruher_system extends bracket {
 			SELECT
 				count(*)
 			FROM
-				matches AS m
+				gm_matches AS m
 			WHERE
 				(team1 = t.id
 				OR
@@ -252,7 +252,7 @@ class karlsruher_system extends bracket {
 					SELECT
 						count(*)
 					FROM
-						goals
+						gm_goals
 					WHERE(
 						((team_id = t.id AND regular = '1')
 						OR
@@ -264,7 +264,7 @@ class karlsruher_system extends bracket {
 					SELECT
 						count(*)
 					FROM
-						goals
+						gm_goals
 					WHERE(
 						((team_id != t.id AND regular = '1')
 						OR
@@ -287,7 +287,7 @@ class karlsruher_system extends bracket {
 			SELECT
 				count(*)
 			FROM
-				matches AS m
+				gm_matches AS m
 			WHERE
 				(team1 = t.id
 				OR
@@ -295,7 +295,7 @@ class karlsruher_system extends bracket {
 			AND
 				status ='1'
 			AND
-				(SELECT count(*) FROM goals WHERE team_id = t.id AND match_id = m.id) = (SELECT count(*) FROM goals WHERE team_id != t.id AND match_id = m.id)
+				(SELECT count(*) FROM gm_goals WHERE team_id = t.id AND match_id = m.id) = (SELECT count(*) FROM gm_goals WHERE team_id != t.id AND match_id = m.id)
 			AND
 				bracket_id = '".$this->id."'
 		) AS matches_draw,
@@ -309,13 +309,13 @@ class karlsruher_system extends bracket {
 			SELECT
 				count(*)
 			FROM
-				goals
+				gm_goals
 			WHERE
 				((team_id = t.id AND regular = '1')
 				OR
 				(team_id != t.id AND regular = '0'))
 			AND
-				match_id IN (SELECT id FROM matches WHERE (team1=t.id OR team2=t.id) AND bracket_id = '".$this->id."' AND status ='1')
+				match_id IN (SELECT id FROM gm_matches WHERE (team1=t.id OR team2=t.id) AND bracket_id = '".$this->id."' AND status ='1')
 		) AS goals,
 		
 		
@@ -325,25 +325,25 @@ class karlsruher_system extends bracket {
 			(SELECT
 				count(*)
 			FROM
-				goals
+				gm_goals
 			WHERE
 				((team_id = t.id AND regular = '1')
 				OR
 				(team_id != t.id AND regular = '0'))
 			AND
-				match_id IN (SELECT id FROM matches WHERE (team1=t.id OR team2=t.id) AND bracket_id = '".$this->id."' AND status ='1')
+				match_id IN (SELECT id FROM gm_matches WHERE (team1=t.id OR team2=t.id) AND bracket_id = '".$this->id."' AND status ='1')
 			) -
 			(
 			SELECT
 				COUNT(*)
 			FROM
-				goals 
+				gm_goals 
 			WHERE
 				((team_id != t.id AND regular = '1')
 				OR
 				(team_id = t.id AND regular = '0'))
 			AND
-				match_id IN (SELECT id FROM matches WHERE (team1=t.id OR team2=t.id) AND bracket_id = '".$this->id."' AND status ='1')
+				match_id IN (SELECT id FROM gm_matches WHERE (team1=t.id OR team2=t.id) AND bracket_id = '".$this->id."' AND status ='1')
 		)
 		) AS goal_difference,
 		
@@ -354,13 +354,13 @@ class karlsruher_system extends bracket {
 			SELECT
 				COUNT(*)
 			FROM
-				goals 
+				gm_goals 
 			WHERE
 				((team_id != t.id AND regular = '1')
 				OR
 				(team_id = t.id AND regular = '0'))
 			AND
-				match_id IN (SELECT id FROM matches WHERE (team1=t.id OR team2=t.id) AND bracket_id = '".$this->id."' AND status ='1')
+				match_id IN (SELECT id FROM gm_matches WHERE (team1=t.id OR team2=t.id) AND bracket_id = '".$this->id."' AND status ='1')
 		) AS goals_against,
 		
 		
@@ -372,7 +372,7 @@ class karlsruher_system extends bracket {
 			SELECT
 				COUNT(*)
 			FROM
-				matches
+				gm_matches
 			WHERE
 				status >= '1'
 			AND
@@ -388,16 +388,16 @@ class karlsruher_system extends bracket {
 		
 		
 		FROM
-			teams AS t
-		INNER JOIN players AS p1 ON t.player1 = p1.id
-		INNER JOIN players AS p2 ON t.player2 = p2.id
-		INNER JOIN players AS p3 ON t.player3 = p3.id
+			gm_teams AS t
+		INNER JOIN gm_players AS p1 ON t.player1 = p1.id
+		INNER JOIN gm_players AS p2 ON t.player2 = p2.id
+		INNER JOIN gm_players AS p3 ON t.player3 = p3.id
 		WHERE
 			t.id IN (
 				SELECT
 					team1
 				FROM
-					matches
+					gm_matches
 				WHERE
 					bracket_id='".$this->id."'
 			)
@@ -406,7 +406,7 @@ class karlsruher_system extends bracket {
 				SELECT
 					team2
 				FROM
-					matches
+					gm_matches
 				WHERE
 					bracket_id='".$this->id."'
 			)

@@ -76,12 +76,16 @@ if (isset($_SESSION['temp']['bracket']['nextstep'])){
 	<form action="<?php echo BASE?>/play_tournament/brackets/new/" method="post">
 	Select offset:<br />
 	<select name="offset">
-		<option value="1">1</option>
-		<option value="2">2</option>
-		<option value="3">3</option>
-		<option value="4">4</option>
-		<option value="5">5</option>
-		<option value="6">6</option>
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+		<option>8</option>
+		<option>9</option>
+		<option>10</option>
 	</select><br />
 	
 	set order of teams:<br /><br />

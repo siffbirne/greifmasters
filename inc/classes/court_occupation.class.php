@@ -46,7 +46,7 @@ class court_occupation extends db {
 	
 	public function get_courts_for_bracket($bracket){
 		#@FIXME:  WHERE o.bracket_id='$bracket'
-		return self::fetch_results("SELECT c.id, c.name FROM courts AS c INNER JOIN court_occupation AS o ON c.id = o.court_id");
+		return self::fetch_results("SELECT c.id, c.name FROM gm_courts AS c INNER JOIN gm_court_occupation AS o ON c.id = o.court_id");
 	}
 	
 	

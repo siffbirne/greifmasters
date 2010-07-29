@@ -26,9 +26,9 @@ $col1_content.='
 	<div class="navContent">
 ';
 foreach ($brackets as $bracket){
-	$col1_content .= '<a href="'.PAGE_ROOT.'/index.php?tournament_id='.$tournament_id.'&bracket='.$bracket['id'].'">'.$bracket['name'].'</a><br />';
+	$col1_content .= '<a href="'.PAGE_ROOT.'/index.php?tournament_id='.$tournament_id.'&bracket='.$bracket['id'].'">'.$bracket['name'].'</a><br />'."\n";
 }
-$col1_content .= '</div></div>';
+$col1_content .= '</div></div>'."\n";
 
 $bracket = new bracket();
 $bracket->load_entry($bracket_id);
@@ -36,9 +36,9 @@ $type = $bracket->get_type();
 $bracket = new $type();
 $bracket->load_entry($bracket_id);
 ob_start();
-echo '<p>Current ranking:</p>';
+echo '<p>Current ranking:</p>'."\n";
 $bracket->draw_ranklist();
-echo '<br /><p>All results</p>';
+echo '<br /><p>All results</p>'."\n";
 $bracket->get_match_results();
 $main_content = ob_get_contents();
 ob_end_clean();

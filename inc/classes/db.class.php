@@ -21,7 +21,7 @@ class db extends mysqli {
 			  exit;
 			}
 	
-		$this->table = $table;
+		$this->table = DB_TABLE_PREFIX.$table;
 	}
 
 	

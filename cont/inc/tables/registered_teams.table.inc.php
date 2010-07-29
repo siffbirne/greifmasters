@@ -14,10 +14,7 @@ $registered_teams = $tournament->get_registered_teams();
 	';
 	
 	#@todo: crap. should be done by some kind of table class
-	if (mysql_affected_rows() == 0){
-			echo end_table(3);
-			return;
-	}
+
 
 
 	foreach ($registered_teams as $team){

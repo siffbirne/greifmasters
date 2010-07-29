@@ -90,9 +90,9 @@ class single_elimination extends bracket{
 				IF(m.team1 <> 0, t1.name, 'tba') AS team1,
 				IF(m.team2 <> 0, t2.name, 'tba') AS team2
 			FROM
-				matches AS m
-			LEFT JOIN teams AS t1 ON t1.id = m.team1
-			LEFT JOIN teams AS t2 ON t2.id = m.team2
+				gm_matches AS m
+			LEFT JOIN gm_teams AS t1 ON t1.id = m.team1
+			LEFT JOIN gm_teams AS t2 ON t2.id = m.team2
 			WHERE
 				bracket_id = '$this->id'
 		";

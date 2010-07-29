@@ -144,7 +144,7 @@ class bracket extends db {
 	}
 	
 	public function get_number_of_matches(){
-		return sizeof(parent::fetch_results("SELECT id FROM matches WHERE bracket_id = '$this->id'"));
+		return sizeof(parent::fetch_results("SELECT id FROM gm_matches WHERE bracket_id = '$this->id'"));
 	}
 	
 	public function get_number_of_teams(){
@@ -190,41 +190,41 @@ class bracket extends db {
 		
 		parent::query("
 			DELETE FROM
-				upc_matches
+				gm_upc_matches
 			WHERE
-				match_id IN (SELECT id FROM matches WHERE bracket_id='$id')
+				match_id IN (SELECT id FROM gm_matches WHERE bracket_id='$id')
 		");
 		
 		parent::query("
 			DELETE FROM
-				goals
+				gm_goals
 			WHERE
-				match_id IN (SELECT id FROM matches WHERE bracket_id='$id')
+				match_id IN (SELECT id FROM gm_matches WHERE bracket_id='$id')
 		");
 		
 		parent::query("
 			DELETE FROM
-				fouls
+				gm_fouls
 			WHERE
-				match_id IN (SELECT id FROM matches WHERE bracket_id='$id')
+				match_id IN (SELECT id FROM gm_matches WHERE bracket_id='$id')
 		");
 		
 		parent::query("
 			DELETE FROM
-				matches
+				gm_matches
 			WHERE
 				bracket_id='$id'
 		");
 		
 		parent::query("
 			DELETE FROM
-				bracket_qualifications
+				gm_bracket_qualifications
 			WHERE
 				bracket_id='$id'
 		");
 		parent::query("
 			DELETE FROM
-				seeding
+				gm_seeding
 			WHERE
 				bracket_id='$id'
 		");
@@ -240,13 +240,13 @@ class bracket extends db {
 		$db = new db('seeding');
 		
 		foreach ($teams as $team){
-			$db->query("INSERT INTO seeding (team_id, bracket_id) VALUES ('".$team."', '$this->id')");
+			$db->query("INSERT INTO gm_seeding (team_id, bracket_id) VALUES ('".$team."', '$this->id')");
 		}
 	}
 	
 	public function get_seeding(){
 		$db = new db('seeding');
-		return $db->fetch_results("SELECT @rownum:=@rownum+1 nr, s.id, s.team_id, t.name FROM (SELECT @rownum:=0) r, seeding s INNER JOIN teams as t on t.id=s.team_id WHERE s.bracket_id='$this->id' ORDER BY s.value");
+		return $db->fetch_results("SELECT @rownum:=@rownum+1 nr, s.id, s.team_id, t.name FROM (SELECT @rownum:=0) r, gm_seeding s INNER JOIN gm_teams as t on t.id=s.team_id WHERE s.bracket_id='$this->id' ORDER BY s.value");
 
 	}
 	
@@ -324,8 +324,7 @@ class bracket extends db {
 		#@todo: ugly!
 		
 		
-		echo '
-		<table class="ranking">
+		echo '<table class="ranking">
 			<tr>
 				<!--		<th>Court</th>-->
 				<th>Team 1</th>
@@ -353,7 +352,7 @@ class bracket extends db {
 				SELECT
 					count(*)
 				FROM
-					goals
+					gm_goals
 				WHERE
 					((team_id = t1.id AND regular = '1')
 					OR
@@ -365,7 +364,7 @@ class bracket extends db {
 				SELECT
 					count(*)
 				FROM
-					goals
+					gm_goals
 				WHERE
 					((team_id = t2.id AND regular = '1')
 					OR
@@ -374,9 +373,9 @@ class bracket extends db {
 					match_id = m.id
 			) AS goals2
 		FROM
-			matches AS m
-			INNER JOIN teams AS t1 ON t1.id = m.team1
-			INNER JOIN teams AS t2 ON t2.id = m.team2
+			gm_matches AS m
+			INNER JOIN gm_teams AS t1 ON t1.id = m.team1
+			INNER JOIN gm_teams AS t2 ON t2.id = m.team2
 		WHERE m.status = 1
 		AND m.bracket_id = '" . $this->id . "'
 		ORDER BY datetime DESC
@@ -385,6 +384,10 @@ class bracket extends db {
 	
 	$matches = new match ( );
 	$matches = $matches->fetch_results ( $query );
+	if ($matches == FALSE){
+		echo '<tr><td>no results found</td></tr></table>';
+		return;
+	}
 	
 	foreach ( $matches as $match ) {
 		
