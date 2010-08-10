@@ -15,11 +15,13 @@ define ('DB_PASS', '');
 define ('DB_NAME', 'greifmasters');
 define ('DB_TABLE_PREFIX', 'gm_');
 
-define ('AUTHORIZED', FALSE);
+
 
 if (isset($_SESSION['user'])){
 	define ('USER', $_SESSION['user']);
 	define ('AUTHORIZED', TRUE);
+}else{
+	define ('AUTHORIZED', FALSE);
 }
 
 

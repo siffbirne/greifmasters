@@ -85,6 +85,11 @@
 		padding: 10px;
 		background: #fff;
 	}
+	
+	#topnav{
+		text-align:left;
+		margin-bottom: 10px;
+	}
 	/*-------------------------------------------------------------------------*/
 	
 	div.padding_5{
@@ -217,8 +222,38 @@
 
 		display: block;
 		padding: 3px;
-		width: 300px;
+		width: 100%;
 		margin: 3px;
 		border: 1px solid #eee;
+	}
+	
+	div.float{
+		float: left;
+	}
+	
+	div.float_50perc{
+		float: left;
+		width: 50%;
+	}
+	div.float_150px{
+		float: left;
+		width: 150px;
+	}
+	
+	table.schedule{
+		border: 1px solid #ccc;
+		margin: 0 5px;
+	}
+	table.schedule td {
+		border-bottom: 1px solid #ccc;
+		text-align: center;
+	}
+	table.schedule th {
+		border-bottom: 3px double #ccc;
+	}
+	
+	.clear{
+		clear: both;
+	margin-bottom: 10px;
 	}
 }

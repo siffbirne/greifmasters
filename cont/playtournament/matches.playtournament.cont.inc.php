@@ -76,11 +76,14 @@ if (isset ( $_GET ['p2'] ) && is_numeric ( $_GET ['p2'] )) {
 
 } elseif (isset ( $_GET ['p2'] ) && $_GET ['p2'] == 'fin') {
 	
-$bracket = new bracket();
-$bracket->load_entry($_SESSION ['bracket_id']);
-$bracket->get_match_results();
+	$bracket = new bracket();
+	$bracket->load_entry($_SESSION ['bracket_id']);
+	$bracket->get_match_results();
 
 } elseif (isset ( $_GET ['p2'] ) && $_GET ['p2'] == 'upc') {
+	
+	$bracket = new bracket();
+	$bracket->load_entry($_SESSION ['bracket_id']);
 	
 	if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'rearrange') {
 		
@@ -88,8 +91,7 @@ $bracket->get_match_results();
 			
 			
 			parse_str($_POST['data']);
-			
-			#require_once ('../../functions.inc.php');
+
 			$db = new db('upc_matches');
 			
 			for ($offset_count = 0; $offset_count < count($ajax_list); $offset_count++) {
@@ -114,233 +116,39 @@ $bracket->get_match_results();
 			}
 		}
 		
-		echo '
-			Display pause between matches of every team: <form action="' . BASE . 'play_tournament/matches/upc/rearrange" method="post">
-			<input type="checkbox" name="enable" value="1" />
-			i want everything between <input type="text" name="lower_limit" maxlength="2" value="' . $_SESSION ['additional_info'] ['lower_limit'] . '" />
-			 and <input type="text" name="upper_limit" maxlength="2" value="' . $_SESSION ['additional_info'] ['upper_limit'] . '" />
-			 <input type="submit" name="additional_info" value="Show" /></form>
-			';
-		
-		$tournament = new tournament ( );
-		$tournament->load_entry ( $_SESSION ['tournament_id'] );
-		$playing_times = $tournament->get_playing_times ();
-		
-		foreach ( $playing_times as $index => $timespan ) {
-			if (time () < strtotime ( $timespan ['end'] ) && time () > strtotime ( $timespan ['begin'] )) {
-				$start = time ();
-				$current_playing_time_index = $index;
-			} elseif (! isset ( $start )) {
-				$start = strtotime ( $timespan ['begin'] );
-				$current_playing_time_index = $index;
-			}
-		
-		}
-		
-		if ($playing_times == FALSE) {
-			echo 'No playing times set. Please do so before scheduling.';
-			return;
-		}
-		
-		#@todo: morgan: couldn't do that sortable thing with table rows. would be better though for the view of it, i think. 
-		echo '<ul id="ajax_list" class="sortable">';
-		
-		$upc_match = new upc_match ( );
-		
-		$query = "
-			SELECT
-				u.id AS upc_id,
-				m.id AS match_id,
-				t1.name AS team1,
-				t2.name AS team2,
-				m.team1 AS team1_id,
-				m.team2 AS team2_id
-			FROM
-				gm_upc_matches AS u
-				INNER JOIN gm_matches AS m ON m.id = u.match_id
-				INNER JOIN gm_teams AS t1 ON m.team1 = t1.id
-				INNER JOIN gm_teams AS t2 ON m.team2 = t2.id
-			WHERE
-				m.bracket_id = '" . $_SESSION ['bracket_id'] . "'
-			ORDER BY u.match_order ASC, u.id ASC
-		";
-		
-		$result = $upc_match->fetch_results ( $query );
-		
-		$bracket = new bracket ( );
-		$bracket->load_entry ( $_SESSION ['bracket_id'] );
-		$timelimit1 = $bracket->get_timelimit1 ();
-		$pause1 = $bracket->get_pause1 ();
-		
-		$blocks = array ();
-		$count = 0;
-		$offset_count = 0;
-		$warning = 0;
-		
-		foreach ( $result as $index => $data ) {
-			
-			$scheduled_time = $start + (($timelimit1 + $pause1) * 60 * $count);
-			
-			if ($scheduled_time + (($timelimit1 + $pause1) * 60) > strtotime ( $playing_times [$current_playing_time_index] ['end'] )) {
-				
-				$current_playing_time_index ++;
-				$scheduled_time = strtotime ( $playing_times [$current_playing_time_index] ['begin'] );
-				$start = $scheduled_time;
-				$count = 0;
-				$offset_count ++;
-			}
-			
-			if (isset ( $playing_times [$current_playing_time_index] )) {
-				$blocks [$offset_count] [] = $data;
-				
-				$count ++;
-			} else {
-				$warning ++;
-			}
-		}
-		
-		$teams = $tournament->get_registered_teams ();
-		$matches_per_block_temp = array ();
-		
-		foreach ( $teams as $team ) {
-			$matches_per_block_temp [$team ['id']] ['name'] = $team ['name'];
-			$matches_per_block_temp [$team ['id']] ['played'] = 0;
-		}
-		
-		$matches_per_block = array ();
-		
-		$offset_count = 1;
-		
-		foreach ( $blocks as $block_index => $block ) {
-			
-			$matches_per_block = $matches_per_block_temp;
-			$list_output = '';
-			$additional_info_1 = '';
-			$additional_info_2 = '';
-			
-			foreach ( $block as $index => $data ) {
-				
-				if (isset ( $_SESSION ['additional_info'] )) {
-					
-					$lower_limit = $_SESSION ['additional_info'] ['lower_limit'];
-					$upper_limit = $_SESSION ['additional_info'] ['upper_limit'];
-					
-					$pause_team1 = '- ';
-					$pause_team2 = '- ';
-					
-					$dummy1 = 0;
-					$dummy2 = 0;
-					
-					while ( isset ( $block [$index - $dummy1 - 1] ) ) {
-						
-						if ($block [$index - $dummy1 - 1] ['team1_id'] == $data ['team1_id'] || $block [$index - $dummy1 - 1] ['team2_id'] == $data ['team1_id']) {
-							$pause_team1 = $dummy1;
-							break;
-						}
-						$dummy1 ++;
-					}
-					
-					while ( isset ( $block [$index - $dummy2 - 1] ) ) {
-						
-						if ($block [$index - $dummy2 - 1] ['team1_id'] == $data ['team2_id'] || $block [$index - $dummy2 - 1] ['team2_id'] == $data ['team2_id']) {
-							$pause_team2 = $dummy2;
-							break;
-						}
-						$dummy2 ++;
-					}
-					
-					if (is_numeric ( $pause_team1 ) && ($pause_team1 < $lower_limit || $pause_team1 > $upper_limit)) {
-						$pause_team1 = '<span class="red"><b>' . $pause_team1 . '</b></span>';
-					} else {
-						$pause_team1 = '<span class="green"><b>' . $pause_team1 . '</b></span>';
-					}
-					
-					if (is_numeric ( $pause_team2 ) && ($pause_team2 < $lower_limit || $pause_team2 > $upper_limit)) {
-						$pause_team2 = '<span class="red"><b>' . $pause_team2 . '</b></span>';
-					} else {
-						$pause_team2 = '<span class="green"><b>' . $pause_team2 . '</b></span>';
-					}
-					
-					$tilnext_team1 = '- ';
-					$tilnext_team2 = '- ';
-					
-					$dummy1 = 0;
-					$dummy2 = 0;
-					
-					while ( isset ( $block [$index + $dummy1 + 1] ) ) {
-						
-						if ($block [$index + $dummy1 + 1] ['team1_id'] == $data ['team1_id'] || $block [$index + $dummy1 + 1] ['team2_id'] == $data ['team1_id']) {
-							$tilnext_team1 = $dummy1;
-							break;
-						}
-						$dummy1 ++;
-					}
-					
-					while ( isset ( $block [$index + $dummy2 + 1] ) ) {
-						
-						if ($block [$index + $dummy2 + 1] ['team1_id'] == $data ['team2_id'] || $block [$index + $dummy2 + 1] ['team2_id'] == $data ['team2_id']) {
-							$tilnext_team2 = $dummy2;
-							break;
-						}
-						$dummy2 ++;
-					}
-					
-					if (is_numeric ( $tilnext_team1 ) && ($tilnext_team1 < $lower_limit || $tilnext_team1 > $upper_limit)) {
-						$tilnext_team1 = '<span class="red"><b>' . $tilnext_team1 . '</b></span>';
-					} else {
-						$tilnext_team1 = '<span class="green"><b>' . $tilnext_team1 . '</b></span>';
-					}
-					
-					if (is_numeric ( $tilnext_team2 ) && ($tilnext_team2 < $lower_limit || $tilnext_team2 > $upper_limit)) {
-						$tilnext_team2 = '<span class="red"><b>' . $tilnext_team2 . '</b></span>';
-					} else {
-						$tilnext_team2 = '<span class="green"><b>' . $tilnext_team2 . '</b></span>';
-					}
-					
-					$additional_info_1 = ' (P: ' . $pause_team1 . ', N: ' . $tilnext_team1 . ')';
-					$additional_info_2 = ' (P: ' . $pause_team2 . ', N: ' . $tilnext_team2 . ')';
-				}
-				
-				$list_output .= '<li id="item_' . $data ['match_id'] . '">' . $offset_count . '.) ' . $data ['team1'] . $additional_info_1 . ' : ' . $data ['team2'] . $additional_info_2 . '</li>';
-				$list_output .= "\n";
-				
-				$matches_per_block [$data ['team1_id']] ['played'] ++;
-				$matches_per_block [$data ['team2_id']] ['played'] ++;
-				$offset_count ++;
-			
-			}
-			
-			echo '<div style="float: right; clear: both; margin-bottom: 20px;">';
-			
-			echo 'Games played by every team in block ' . ($block_index + 1) . ': <br /><br />';
-			
-			$teams = array ();
-			$played = array ();
-			
-			foreach ( $matches_per_block as $key => $row ) {
-				
-				$teams [$key] = $row ['name'];
-				$played [$key] = $row ['played'];
-			
-			}
-			
-			array_multisort ( $teams, $played );
-			#SORT_ASC, SORT_NUMERIC,
-			
+//	echo '
+//		Display pause between matches of every team: <form action="' . BASE . 'play_tournament/matches/upc/rearrange" method="post">
+//		<input type="checkbox" name="enable" value="1" />
+//		i want everything between <input type="text" name="lower_limit" maxlength="2" value="' . $_SESSION ['additional_info'] ['lower_limit'] . '" />
+//		 and <input type="text" name="upper_limit" maxlength="2" value="' . $_SESSION ['additional_info'] ['upper_limit'] . '" />
+//		 <input type="submit" name="additional_info" value="Show" /></form>
+//		';
 
-			foreach ( $teams as $key3 => $team ) {
-				echo $team . ': ' . $played [$key3] . '<br />';
+		
+		
+		$schedule = $bracket->generate_schedule('','pause/next');
+		
+		$blocks = $schedule[0];
+		$matches_per_block = $schedule[1];
+		
+		foreach ($blocks as $block_index => $block){
+
+			foreach ($block as $court_index=> $court){
+				echo '<div class="float_150px"><h3>Court '.$court_index.': </h3><br><ul id="ajax_list_'.$court_index.'" class="sortable">';
+				foreach ($court as $match){
+					echo '<li id="'.$match['id'].'" title="'.date ( 'D, H:i', $match['time']).': '.$match['team1'].' - '.$match['team2'].'">'.substr($match['team1'], 0, 10).'... - '.substr($match['team2'], 0, 10).'...</li>';
+				}
+				echo '</ul></div>';
 			}
+			echo '<div class="float">';
 			
+			foreach ( $matches_per_block[$block_index] as $team ) {
+				echo $team['name'] . ': ' . $team['played'] . '<br />'."\n";
+			}
 			echo '</div>';
-			
-			echo $list_output . '<br style="clear: both;" />';
+			echo '<br class="clear" />';
 		}
 		
-		if ($warning != 0) {
-			#@todo: lang. file
-			echo '<span class="red">WARNING: ' . $warning . ' matches missing in this list. Please adjust your playing times</span>';
-		}
 		
 		?>
 
@@ -366,154 +174,62 @@ Sortable.create("ajax_list",
 		return;
 	
 	}
-	
-	?>
+$bracket = new bracket();
+$bracket->load_entry($_SESSION ['bracket_id']);
 
-<table class="ranking">
-	<tr>
-		<th>No.</th>
-		<th>Time</th>
-		<th>Court</th>
-		<th>Team 1</th>
-		<th>Team 2</th>
-	</tr>
-	
-	
-<?php
-	
-	$query = "
+echo '
+	<div id="topnav">';
 
-		SELECT
-			t1.name AS team1,
-			t2.name AS team2,
-			m.team1 AS team1_id,
-			m.team2 AS team2_id,
-			u.ready_team1 AS ready_team1,
-			u.ready_team2 AS ready_team2,
-			u.court_id AS court
-		FROM
-			gm_upc_matches AS u
-			INNER JOIN gm_matches AS m ON m.id = u.match_id
-			INNER JOIN gm_teams AS t1 ON m.team1 = t1.id
-			INNER JOIN gm_teams AS t2 ON m.team2 = t2.id
-		WHERE
-			m.bracket_id = '" . $_SESSION ['bracket_id'] . "'
-		ORDER BY u.match_order ASC, u.id ASC
+$courts = $bracket->get_courts();
+foreach ($courts as $court){
+	echo '<a href="' . BASE . '/play_tournament/matches/upc/court/'.$court['id'].'">'.$court['name'].'</a> - '."\n";
+}
+echo '<a href="' . BASE . '/play_tournament/matches/upc">All courts</a> - '."\n";
+echo'
+	<a href="' . BASE . '/play_tournament/matches/upc/rearrange">rearrange schedule</a></div>
+';
+
+$bracket = new bracket();
+$bracket->load_entry($_SESSION ['bracket_id']);
+
+if (isset($_GET ['p3']) && $_GET ['p3'] == 'court'){
+	$courts = $bracket->generate_schedule($_GET ['p4']);
+}else{
+	$courts = $bracket->generate_schedule();
+}
+
+
+	foreach ($courts as $key=>$row){
 		
-	";
-	#,c.name AS court INNER JOIN courts AS c ON c.id = u.court_id
-	
-
-	$bracket = new bracket ( );
-	$bracket->load_entry ( $_SESSION ['bracket_id'] );
-	$timelimit1 = $bracket->get_timelimit1 ();
-	$pause1 = $bracket->get_pause1 ();
-	
-	$upc_matches = new upc_match ( );
-	$upc_matches = $upc_matches->fetch_results ( $query );
-	
-	$get_courts = $bracket->get_courts ();
-	$courts = array ();
-	foreach ( $get_courts as $row ) {
-		$courts [$row ['id']] ['name'] = $row ['name'];
-		$courts [$row ['id']] ['count'] = 0;
+		$court = new court();
+		$court->load_entry($key);
+		$name = $court->get_name();
+		
+		echo'<div class="float_50perc"><h3>'.$name.'</h3><br />
+			<table class="schedule">
+				<tr>
+					<th>No.</th>
+					<th>Time</th>
+					<th>Team 1</th>
+					<th>Team 2</th>
+				</tr>';
+		
+		foreach ($row as $row2){
+			
+			if ($row2['time'] == FALSE){
+				$time = 'N/A';
+			}else{
+				$time = date ( 'D, H:i', $row2['time'] );
+			}
+			
+			echo '<tr><td>'.$row2['index'].'</td><td>'.$time.'</td><td>'.$row2['team1'].'</td><td>'.$row2['team2'].'</td></tr>'."\n";
+		}
+		
+		
+		echo '</table></div>';
 	}
-	
-	$offset_count = 0;
-	
 
-	$tournament = new tournament ( );
-	$playing_times = $tournament->get_playing_times ();
-	
-	foreach ( $playing_times as $index => $timespan ) {
-		if (time () < strtotime ( $timespan ['end'] ) && time () > strtotime ( $timespan ['begin'] )) {
-			$start = time ();
-			$current_playing_time_index = $index;
-		} elseif (! isset ( $start ) && time () < strtotime ( $timespan ['begin'] )) {
-			$start = strtotime ( $timespan ['begin'] );
-			$current_playing_time_index = $index;
-		}
-	}
-	
-	foreach ( $upc_matches as $index => $upc_match ) {
-		#@todo: bei verspätungen an einem einzelnen court oder wenn man zu früh im zeitplan ist werden die matches nicht mehr chronologisch angezeigt
-		if ($playing_times != FALSE) {
-			
-			$court_id = $upc_match ['court'];
-			
-			if (! $courts [$court_id]) {
-				$court ['name'] = '<span class="red">N/A</span>';
-				$courts [$court_id] ['count'] = 0;
-			} else {
-				$court = $courts [$court_id];
-				$courts [$court_id] ['count'] ++;
-				#@todo: achtung: beginnt immer bei 1
-			}
-			
-			$scheduled_time = $start + (($timelimit1 + $pause1) * 60 * $court ['count']);
-			$scheduled_time_formated = date ( 'D, H:i', $scheduled_time );
-			
-			if ($scheduled_time + (($timelimit1 + $pause1) * 60) > strtotime ( $playing_times [$current_playing_time_index] ['end'] )) {
-				
-				$current_playing_time_index ++;
-				if ($playing_times [$current_playing_time_index] == NULL) {
-					$scheduled_time_formated = '<span class="red">N/A</span>';
-				} else {
-					$scheduled_time = strtotime ( $playing_times [$current_playing_time_index] ['begin'] );
-					$scheduled_time_formated = date ( 'D, H:i', $scheduled_time );
-					$start = $scheduled_time;
-					foreach ( $courts as $key=>$row ) {
-						$courts[$key]['count'] = 0;
-					}
-					$courts [$court_id] ['count'] ++;
-				}
-			}
-		} else {
-			$scheduled_time_formated = 'N/A';
-		}
-		
-		echo '
-		<tr>
-			<td>' . ($index + 1) . '.)</td>
-			<td>' . $scheduled_time_formated . '</td>
-			<td>' . $court ['name'] . '</td>
-			<td>';
-		
-		if (READY_SIGNAL_OFFSET != FALSE && $offset_count < READY_SIGNAL_OFFSET) {
-			if ($upc_match ['ready_team1'] == 1) {
-				echo '<span class="green">' . $upc_match ['team1'] . '</span>';
-			} else {
-				echo '<span class="red">' . $upc_match ['team1'] . '</span>';
-			}
-		} else {
-			echo $upc_match ['team1'];
-		}
-		
-		echo '
-			</td><td>';
-		
-		if (READY_SIGNAL_OFFSET != FALSE && $offset_count < READY_SIGNAL_OFFSET) {
-			if ($upc_match ['ready_team2'] == 1) {
-				echo '<span class="green">' . $upc_match ['team2'] . '</span>';
-			} else {
-				echo '<span class="red">' . $upc_match ['team2'] . '</span>';
-			}
-		} else {
-			echo $upc_match ['team2'];
-		}
-		
-		echo '
-			</td>
-		</tr>
-		';
-		$offset_count ++;
-	
-	}
-	
-	echo '
-		</table>
-		<a href="' . BASE . '/play_tournament/matches/upc/rearrange">rearrange schedule</a>
-	';
+
 }
 
 ?>

@@ -56,15 +56,70 @@ if (isset($_GET['p1']) && is_numeric(htmlentities($_GET['p1']))){
 				$registration->delete($_GET ['p4']);
 			}elseif( isset ($_GET ['p3']) && $_GET ['p3'] == 'details') {
 				
+				#@FIXME: output formatieren
+				
 				$team = new team();
 				$team->load_entry($_GET ['p4']);
 				
-				var_dump($team->get_goals());
-				var_dump($team->get_matches());
-				var_dump($team->get_brackets());
+				echo 'stats for '.$team->get_name().'<br />';
 				
 				
+				$goals = $team->get_goals('',$_SESSION['tournament_id']);
+				echo '<table>
+						<tr>
+							<th>Opponent</th>
+							<th>Player</th>
+						</tr>
+				';
+				foreach ($goals as $goal){
+					echo '<tr><td><a href="'.BASE.'/play_tournament/matches/'.$goal['match_id'].'">'.$goal['opponent'].'</a></td><td>'.$goal['player_name'].'</td></tr>'."\n";
+				}
+				echo '</table>';
 				
+				$matches = $team->get_matches('',$_SESSION['tournament_id']);
+				echo '<table class="ranking">
+						<tr>
+							<th>Team 1</th>
+							<th>Team 2</th>
+							<th>Score</th>
+							<th>Time</th>
+						</tr>
+				';
+				foreach ($matches as $match){
+					echo '<td>';
+					
+					if ($match ['team1'] == $team->get_name()) {
+						echo '<b>' . $match ['team1'] . '</b>';
+					} else {
+						echo $match ['team1'];
+					}
+					
+					echo '</td><td>';
+					
+					if ($match ['team2'] == $team->get_name()) {
+						echo '<b>' . $match ['team2'] . '</b>';
+					} else {
+						echo $match ['team2'];
+					}
+					
+					echo '
+						</td>
+						<td>' . $match ['goals1'] . ':' . $match ['goals2'] . '</td>
+						<td>' . $match ['time'] . '</td>';
+					echo'</tr>'."\n";
+				}
+				echo '</table>';
+				
+				
+				$brackets = $team->get_brackets($_SESSION['tournament_id']);
+
+				foreach ($brackets as $bracket){
+					echo $bracket['name'].', '."\n";
+				}
+
+				
+				
+				return;
 				
 			}else{
 				include 'cont/inc/tables/registered_teams.table.inc.php';

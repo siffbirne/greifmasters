@@ -14,6 +14,13 @@ class single_elimination extends bracket{
 	public function draw_bracket(){
 		
 		$qualified = self::get_qualified_teams();
+		
+		#lazy hack:
+		foreach ($qualified as $team_index => $team){
+			$qualified[$team_index] = $team['id'];
+		}
+		
+		
 		$size = sizeof($qualified);
 		if ($size - pow(2, floor(log($size, 2))) != 0){return ('Unvalid number of teams chosen to be seeded in the single elimination bracket');}
 
@@ -107,9 +114,13 @@ class single_elimination extends bracket{
 	
 	public function draw_ranklist(){
 		
+		
+		
 		$results = self::get_ranking();
 		$number_of_matches = sizeof($results);
 		$qualified = sizeof(self::get_qualified_teams());
+		
+		
 		$rows = $qualified + ($qualified-1);
 		
 		echo '

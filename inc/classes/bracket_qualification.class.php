@@ -20,9 +20,13 @@ class bracket_qualification extends db {
 	
 	public function get_qualified_teams(){
 		
-		$help = parent::select('team_id',"bracket_id='$this->bracket_id'");
+		#@todo: return value was changed from array(id) to array (array(id, name)). any trouble?
+		
+		$query = "SELECT q.team_id, t.name FROM gm_bracket_qualifications AS q INNER JOIN gm_teams AS t ON q.team_id = t.id";
+		
+		$help = parent::fetch_results($query);
 		foreach ($help as $row){
-			$return[] = $row['team_id'];
+			$return[] = array('id' => $row['team_id'], 'name' => $row['name']);
 		}
 		return $return;
 	}

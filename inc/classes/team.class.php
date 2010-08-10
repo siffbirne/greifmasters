@@ -100,6 +100,7 @@ class team extends db{
 				m.id AS match_id,
 				m.bracket_id AS bracket_id,
 				t.id AS tournament_id,
+				m.status AS status,
 				(
 					SELECT
 						count(*)
@@ -139,7 +140,7 @@ class team extends db{
 				$query .= " AND tournament_id = '$tournament'";
 			}
 			$query .= '	ORDER BY datetime DESC';
-			
+
 			return self::fetch_results($query);
 	}
 	
@@ -147,11 +148,15 @@ class team extends db{
 		
 		$query = "
 			SELECT
-				g.id AS goal_id, g.player_id AS player_id, p.name AS player_name, g.match_id AS match_id, t.name AS opponent
+				g.id AS goal_id,
+				g.player_id AS player_id,
+				p.name AS player_name,
+				g.match_id AS match_id,
+				teams.name AS opponent				
 			FROM gm_goals AS g
 			INNER JOIN gm_players AS p ON p.id = g.player_id
 			INNER JOIN gm_matches AS m ON m.id = g.match_id
-			INNER JOIN gm_teams AS t ON t.id = 
+			INNER JOIN gm_teams AS teams ON (teams.id = m.team1 OR teams.id = m.team2) AND teams.id != '" . $this->id . "'
 			INNER JOIN gm_brackets AS b ON m.bracket_id = b.id
 			INNER JOIN gm_tournaments AS t ON t.id = b.tournament_id
 			WHERE g.team_id = '" . $this->id . "'
@@ -162,7 +167,6 @@ class team extends db{
 			}elseif($tournament != ''){
 				$query .= " AND b.tournament_id = '$tournament'";
 			}
-		
 		
 		return self::fetch_results($query);
 		
