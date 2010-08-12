@@ -595,6 +595,7 @@ class bracket extends db {
 
 		$offset_count = 0;
 		$return_courts = array ();
+		$return_blocks_courts = array ();
 		$blocks = array ();
 		
 
