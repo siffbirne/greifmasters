@@ -59,6 +59,7 @@ class schedule {
 		
 	
 		$tournament = new tournament ( );
+		$tournament->load_entry($_SESSION['tournament_id']);
 		$playing_times = $tournament->get_playing_times ();
 		
 		foreach ( $playing_times as $index => $timespan ) {

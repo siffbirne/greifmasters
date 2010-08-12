@@ -6,9 +6,14 @@ if (isset($_GET['p1']) && is_numeric(htmlentities($_GET['p1']))){
 	unset ($_SESSION['match_id'], $_SESSION['bracket_id']);
 }elseif(isset($_SESSION['tournament_id'])){
 	$tournament_id = $_SESSION['tournament_id'];
+}elseif(isset($_SESSION['bracket_id'])){
+	$bracket = new bracket();
+	$bracket->load_entry($_SESSION['bracket_id']);
+	$tournament_id = $bracket->get_tournament_id();
+	$_SESSION['tournament_id'] = $tournament_id;
 }else{
 	$_SESSION['notification']=2;
-	header ( "Location: /admin" );
+	header ( "Location: ".BASE );
 	break;
 }
 

@@ -2,15 +2,25 @@
 
 
 #@FIXME: clear url to standard after get-triggered actions to enable reload-ability
+if (isset ( $_GET ['p3'] ) && is_numeric($_GET ['p3'])){
+	$_SESSION['court_id'] = $_GET ['p3'];
+}
 
-if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'goal') {
-	unset($_GET ['p3']);
+if (!isset ($_SESSION['court_id'])){
+	echo "please select a court";
+	return;
+}
+
+if (isset ( $_GET ['p4'] ) && $_GET ['p4'] == 'goal') {
+	unset($_GET ['p4']);
 	
-	if (isset($_GET['p4']) && $_GET['p4'] == 'store'){
-		unset($_GET ['p4']);
+	if (isset($_GET['p5']) && $_GET['p5'] == 'store'){
+		unset($_GET ['p5']);
 	
 		$team = $_POST ['team'];
+		
 		$player = $_POST ['player'];
+		
 		$match = $_SESSION ['match_id'];
 		$minute = 0;
 		if (isset ( $_POST ['owngoal'] )) {
@@ -25,10 +35,10 @@ if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'goal') {
 		
 	}
 	
-	if (isset($_GET['p4']) && $_GET['p4'] == 'delete'){
+	if (isset($_GET['p5']) && $_GET['p5'] == 'delete'){
 		$goal = new goal();
-		$goal->delete($_GET['p5']);
-		unset($_GET ['p5']);
+		$goal->delete($_GET['p6']);
+		unset($_GET ['p6']);
 		
 	}
 
@@ -37,13 +47,16 @@ if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'goal') {
 
 
 
-if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'finish_match'){
-	$match = new match();
-	$match->load_entry($_SESSION['match_id']);
-	$match->finish();
+
+if (isset ( $_GET ['p4'] ) && $_GET ['p4'] == 'finish_match'){
+	if (is_numeric ($_GET ['p5'])){
 	
-	unset ($_SESSION['match_id']);
-	unset($_GET ['p3']);
+		$match = new match();
+		$match->load_entry($_GET ['p5']);
+		$match->finish();
+		
+		unset ($_SESSION['match_id'], $_GET ['p4'], $_GET ['p5']);
+	}
 }
 
 
@@ -68,6 +81,7 @@ if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'finish_match'){
 			INNER JOIN gm_teams AS t2 ON m.team2 = t2.id
 		WHERE
 			m.bracket_id = '".$_SESSION['bracket_id']."'
+			AND u.court_id = '".$_SESSION['court_id']."'
 		ORDER BY u.match_order ASC, u.id ASC
 		LIMIT 1
 	";
@@ -111,7 +125,7 @@ $goals2 = $active->get_goals_2 ();
 			<input class="button" name="start" type="button" id="start" value="Start" onclick="StartTimer();" />
 			<input class="button" name="stop" type="button" id="stop" value="Stop" onclick="StopTimer();" />
 			<input class="button" name="continue" type="button" id="continue" value="Continue" onclick="ContinueTimer();" />
-			<a href="<?php echo BASE; ?>/play_tournament/matches/ong/finish_match/<?php echo $_SESSION['match_id']; ?>">finish match</a>
+			<a href="<?php echo BASE; ?>/play_tournament/matches/ong/<?php echo $_SESSION['court_id']; ?>/finish_match/<?php echo $_SESSION['match_id']; ?>">finish match</a>
 		</div>
 		</form>
 

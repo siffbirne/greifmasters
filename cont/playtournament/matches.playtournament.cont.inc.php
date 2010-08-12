@@ -31,7 +31,7 @@ if (isset ( $_GET ['p2'] ) && is_numeric ( $_GET ['p2'] )) {
 	$goals2 = $match->get_goals_2 ();
 	
 	echo '
-		this is quite temporary...<table widht="300px">
+		this is quite temporary...<table width="300px">
 			<tr>
 				<td>' . $team1->get_name () . '</td>
 				<td>&nbsp;</td>
@@ -131,6 +131,8 @@ if (isset ( $_GET ['p2'] ) && is_numeric ( $_GET ['p2'] )) {
 		$blocks = $schedule[0];
 		$matches_per_block = $schedule[1];
 		
+		
+		
 		foreach ($blocks as $block_index => $block){
 
 			foreach ($block as $court_index=> $court){
@@ -142,8 +144,8 @@ if (isset ( $_GET ['p2'] ) && is_numeric ( $_GET ['p2'] )) {
 			}
 			echo '<div class="float">';
 			
-			foreach ( $matches_per_block[$block_index] as $team ) {
-				echo $team['name'] . ': ' . $team['played'] . '<br />'."\n";
+			foreach ( $matches_per_block[$block_index] as $ref ) {
+				echo $ref['name'] . ': ' . $ref['played'] . '<br />'."\n";
 			}
 			echo '</div>';
 			echo '<br class="clear" />';
@@ -189,8 +191,7 @@ echo'
 	<a href="' . BASE . '/play_tournament/matches/upc/rearrange">rearrange schedule</a></div>
 ';
 
-$bracket = new bracket();
-$bracket->load_entry($_SESSION ['bracket_id']);
+
 
 if (isset($_GET ['p3']) && $_GET ['p3'] == 'court'){
 	$courts = $bracket->generate_schedule($_GET ['p4']);
@@ -228,7 +229,7 @@ if (isset($_GET ['p3']) && $_GET ['p3'] == 'court'){
 		
 		echo '</table></div>';
 	}
-
+echo '<br class="clear" />';
 
 }
 

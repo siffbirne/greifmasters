@@ -80,6 +80,21 @@ class tournament extends db {
 		
 	}
 	
+	public function get_courts(){
+		$query = "
+			SELECT
+				c.id AS id, c.name AS name
+			FROM
+				gm_courts AS c
+				INNER JOIN gm_court_occupation AS o ON c.id = o.court_id
+				INNER JOIN gm_brackets AS b ON b.id = o.bracket_id
+			WHERE b.tournament_id = '$this->id'
+		";
+		
+		return self::fetch_results($query);
+		
+	}
+	
 	public function get_playing_times(){
 		
 		return parent::fetch_results("
@@ -88,7 +103,7 @@ class tournament extends db {
 			FROM
 				gm_playing_times
 			WHERE
-				tournament_id = '".$_SESSION['tournament_id']."'
+				tournament_id = '".$this->id."'
 			ORDER BY begin ASC
 		");
 		

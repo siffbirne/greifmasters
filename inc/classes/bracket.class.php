@@ -40,7 +40,7 @@ class bracket extends db {
 
 	public function setup($name, $type) {
 
-		db::store ( 'name, type, tournament_id, status', "'$name', '$type', '" . $_SESSION ['tournament_id'] . "', '1'" );
+		parent::store ( 'name, type, tournament_id, status', "'$name', '$type', '" . $_SESSION ['tournament_id'] . "', '1'" );
 	}
 
 
@@ -321,6 +321,7 @@ class bracket extends db {
 
 		$qualified = new bracket_qualification ( $this->id );
 		$teams = $qualified->get_qualified_teams ();
+
 		$db = new db ( 'seeding' );
 		
 		foreach ( $teams as $team ) {
@@ -383,6 +384,10 @@ class bracket extends db {
 
 		switch ($mode) {
 			
+			case 'select':
+				
+				return;
+			
 			case 'top' :
 				$bracket = new bracket ( );
 				$bracket->load_entry ( $from_bracket );
@@ -401,9 +406,11 @@ class bracket extends db {
 		}
 		
 		$bracket_qualification = new bracket_qualification ( $this->id );
+		
 		foreach ( $qualified as $team ) {
 			$bracket_qualification->add ( $team ['id'] );
 		}
+
 	}
 
 
@@ -413,7 +420,40 @@ class bracket extends db {
 		return TRUE;
 	}
 
-
+	public function get_top_scorers($limit = FALSE){
+		
+		$query = "
+			SELECT
+				p.id, p.name AS player_name, t.name AS team_name,
+			(SELECT count(*) FROM gm_goals AS g WHERE g.player_id = p.id AND g.match_id IN (SELECT id FROM gm_matches WHERE bracket_id = '$this->id')) AS goals_scored
+			FROM gm_players AS p
+			INNER JOIN gm_teams AS t ON t.player1 = p.id OR t.player2 = p.id OR t.player3 = p.id
+			ORDER BY goals_scored DESC
+		";
+		
+		if ($limit != FALSE){
+			$query .= 'LIMIT '.$limit;
+		}
+		
+		$results = self::fetch_results($query);
+		
+		echo '<table class="ranking"><tr><th>Rank</th><th>Name</th><th>Team</th><th>Goals scored</th></tr>'."\n";
+		$i = 1;
+		
+		foreach ($results as $row){
+			
+			if ( !isset($temp) || ($row['goals_scored'] < $temp && $temp > 0)){
+				$temp = (int)$row['goals_scored'];
+				$count = $i;
+			}
+				$i++;
+			
+			echo '<tr><td>'.$count.'</td><td>'.$row['player_name'].'</td><td>'.$row['team_name'].'</td><td>'.$row['goals_scored'].'</td></tr>';
+		}
+		
+		echo '</table>';
+		
+	}
 
 	public function get_match_results() {
 
@@ -579,6 +619,7 @@ class bracket extends db {
 
 
 		$tournament = new tournament ( );
+		$tournament->load_entry($this->tournament_id);
 		$playing_times = $tournament->get_playing_times ();
 		
 		foreach ( $playing_times as $match_index => $timespan ) {
@@ -601,7 +642,7 @@ class bracket extends db {
 				
 				$court_id = $upc_match ['court'];
 				
-				if (! $courts [$court_id]) {
+				if (! isset($courts [$court_id])) {
 					$court_id = key ( $courts );
 				}
 				
@@ -610,7 +651,7 @@ class bracket extends db {
 				if ($scheduled_time + (($timelimit1 + $pause1) * 60) > strtotime ( $playing_times [$current_playing_time_index] ['end'] )) {
 					
 
-					if ($playing_times [($current_playing_time_index + 1)] == NULL) {
+					if (!isset($playing_times [($current_playing_time_index + 1)])) {
 						$scheduled_time = FALSE;
 					} else {
 						$current_playing_time_index ++;

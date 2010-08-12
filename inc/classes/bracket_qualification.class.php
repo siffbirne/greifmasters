@@ -22,7 +22,7 @@ class bracket_qualification extends db {
 		
 		#@todo: return value was changed from array(id) to array (array(id, name)). any trouble?
 		
-		$query = "SELECT q.team_id, t.name FROM gm_bracket_qualifications AS q INNER JOIN gm_teams AS t ON q.team_id = t.id";
+		$query = "SELECT q.team_id, t.name FROM gm_bracket_qualifications AS q INNER JOIN gm_teams AS t ON q.team_id = t.id WHERE q.bracket_id = '$this->bracket_id'";
 		
 		$help = parent::fetch_results($query);
 		foreach ($help as $row){

@@ -8,14 +8,14 @@
 	
 <?php
 
-$teams = new db('teams');
-$teams = $teams->select('id');
+$refs = new db('teams');
+$refs = $refs->select('id');
 
-foreach ($teams as $team){
+foreach ($refs as $ref){
 	$temp = new team();
-	$temp->load_entry($team['id']);
+	$temp->load_entry($ref['id']);
 	$players = $temp->get_players();
-	$edit = BASE.'/teams/'.$team['id'];
+	$edit = BASE.'/teams/'.$ref['id'];
 	echo'
 		<tr>
 			<td><a href="'.$edit.'">'.$temp->get_name().'</a></td>

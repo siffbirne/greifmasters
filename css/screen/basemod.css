@@ -90,6 +90,14 @@
 		text-align:left;
 		margin-bottom: 10px;
 	}
+	
+	h2{
+		margin: 10px 0 20px 0;
+	}
+	
+	h3{
+		margin: 10px 0 5px 0;
+	}
 	/*-------------------------------------------------------------------------*/
 	
 	div.padding_5{
@@ -147,10 +155,11 @@
 		border-collapse: collapse;
 	}
 	table td {
-		padding: 3px;
+		padding: 1px 3px;
 	}
 	table th {
 		text-align: center;
+		padding: 3px;
 	}
 	table.ranking {
 		border: 1px solid #ccc;
@@ -163,12 +172,22 @@
 	table.ranking th {
 		border-bottom: 3px double #ccc;
 	}
+	table.border {
+		border: 1px solid #ccc;
+	}
+	table.border td {
+		border-bottom: 1px solid #ccc;
+	}
+	table.border th {
+		border-bottom: 3px double #ccc;
+	}
 	table.tournament_outline {
 		width: 200px;
 		height: 100px;
 	}
 	div.play_tournament_controls#upcgames {
-		clear: both;
+		clear: right;
+		padding-top:20px;
 	}
 	div.play_tournament_team1 {
 		float: left;

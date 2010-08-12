@@ -6,6 +6,7 @@ class match extends db {
 	
 	protected $id;
 	protected $bracket_id;
+	protected $court_id;
 	protected $team1;
 	protected $team2;
 	protected $datetime;
@@ -88,6 +89,10 @@ class match extends db {
 		parent::update("datetime=NOW()", "id='$this->id'");
 	}
 	
+	public function set_court($court){
+		parent::update("court_id='$court'", "id='$this->id'");
+	}
+	
 	public function set_team1($team){
 		parent::update("team1='$team'", "id='$this->id'");
 	}
@@ -132,7 +137,7 @@ class match extends db {
 	public function reschedule(){
 		self::set_status(0);
 		$upc_match = new upc_match();
-		$upc_match->store($this->id);
+		$upc_match->store($this->id, $this->court_id);
 	}
 	
 	public function finish(){
@@ -149,8 +154,10 @@ class match extends db {
 		$bracket->process_finished_match($this->id);
 		
 		$upc_match = new upc_match();
-		$id = $upc_match->select('id',"match_id='$this->id'");
-		$id = $id[0]['id'];
+		$upc_match_data = $upc_match->select('id, court_id',"match_id='$this->id'");
+		
+		self::set_court($upc_match_data[0]['court_id']);
+		$id = $upc_match_data[0]['id'];
 		$upc_match->delete($id);
 		
 		

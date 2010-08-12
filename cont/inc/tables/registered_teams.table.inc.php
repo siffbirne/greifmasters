@@ -17,10 +17,10 @@ $registered_teams = $tournament->get_registered_teams();
 
 
 
-	foreach ($registered_teams as $team){
+	foreach ($registered_teams as $ref){
 		$new = new team();
 
-		$new->load_entry($team['id']);
+		$new->load_entry($ref['id']);
 		$players = $new->get_players();
 		
 		#@todo: players names in there? not quite sure...
@@ -30,9 +30,9 @@ $registered_teams = $tournament->get_registered_teams();
 					<td>'.$new->get_city().'</td>
 					<td>'.$players['player1'].', '.$players['player2'].', '.$players['player3'].'</td>
 					<td>
-					<a href="'.BASE.'/tournament/'.$_SESSION['tournament_id'].'/teams/unregister/'.$team['reg_id'].'">
+					<a href="'.BASE.'/tournament/'.$_SESSION['tournament_id'].'/teams/unregister/'.$ref['reg_id'].'">
 					<img src="'.GFX_DELETE.'" alt="delete registration" /></a>
-					&nbsp;<a href="'.BASE.'/tournament/'.$_SESSION['tournament_id'].'/teams/details/'.$team['id'].'">
+					&nbsp;<a href="'.BASE.'/tournament/'.$_SESSION['tournament_id'].'/teams/details/'.$ref['id'].'">
 					<img src="'.GFX_VIEW.'" alt="details" />
 					</a>
 					</td>

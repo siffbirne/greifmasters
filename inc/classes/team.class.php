@@ -99,6 +99,7 @@ class team extends db{
 				DATE_FORMAT(m.datetime, '%a, %H:%i') AS time,
 				m.id AS match_id,
 				m.bracket_id AS bracket_id,
+				b.name AS bracket_name,
 				t.id AS tournament_id,
 				m.status AS status,
 				(
@@ -154,7 +155,7 @@ class team extends db{
 				g.match_id AS match_id,
 				teams.name AS opponent				
 			FROM gm_goals AS g
-			INNER JOIN gm_players AS p ON p.id = g.player_id
+			LEFT JOIN gm_players AS p ON p.id = g.player_id
 			INNER JOIN gm_matches AS m ON m.id = g.match_id
 			INNER JOIN gm_teams AS teams ON (teams.id = m.team1 OR teams.id = m.team2) AND teams.id != '" . $this->id . "'
 			INNER JOIN gm_brackets AS b ON m.bracket_id = b.id

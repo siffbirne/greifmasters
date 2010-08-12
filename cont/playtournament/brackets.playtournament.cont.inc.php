@@ -59,7 +59,7 @@ if(isset($_GET['p2']) && is_numeric($_GET['p2'])){
 			
 			foreach ($_POST as $key=>$value){
 				if ($value == 1){
-					$courts->store($key);
+					$courts->store($key, $_SESSION['bracket_id']);
 				}
 			}
 			
@@ -81,7 +81,14 @@ if(isset($_GET['p2']) && is_numeric($_GET['p2'])){
 		return;
 	}
 
-	
+	if (isset($_GET['p3']) && $_GET['p3']=='stats'){
+		
+		echo '<h2>Top scorers for bracket: '.$bracket->get_name().'</h2>';
+		
+		$bracket->get_top_scorers();
+		
+		return;
+	}
 	
 //	$status = $bracket->get_status();
 //

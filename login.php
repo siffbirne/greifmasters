@@ -37,6 +37,7 @@ if (isset ( $_GET ['login'] ) && $_GET ['login'] == 1) {
 			}
 			
 			$_SESSION['user'] = $user_id;
+			$_SESSION['rights'] = $rights;
 
 			header ( "Location: admin" );
 			exit;

@@ -46,7 +46,7 @@ class court_occupation extends db {
 	
 	public function get_courts_for_bracket($bracket){
 		#@FIXME:  WHERE o.bracket_id='$bracket'
-		return self::fetch_results("SELECT c.id, c.name FROM gm_courts AS c INNER JOIN gm_court_occupation AS o ON c.id = o.court_id");
+		return self::fetch_results("SELECT c.id, c.name FROM gm_courts AS c INNER JOIN gm_court_occupation AS o ON c.id = o.court_id WHERE o.bracket_id='$bracket'");
 	}
 	
 	
@@ -63,13 +63,13 @@ class court_occupation extends db {
 //		
 //	}
 
-	public function store($court_id){
+	public function store($court_id, $bracket_id){
 		
 		#@todo: check if court is occupied?
 		
 		parent::store(
 			'court_id, bracket_id, taken_by',
-			"'$court_id', '".$_SESSION['bracket_id']."', '".$_SESSION['user']."'"
+			"'$court_id', '$bracket_id', '".$_SESSION['user']."'"
 		);
 		
 		

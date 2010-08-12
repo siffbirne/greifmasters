@@ -97,7 +97,7 @@ class karlsruher_system extends bracket {
 
 
 		
-		$matchlist = shuffle_matchlist($matchlist,$number_of_teams);
+		#$matchlist = shuffle_matchlist($matchlist,$number_of_teams);
 	#@todo: seperate the shuffle function, or add a possibility to skip that step
 
 		
@@ -396,11 +396,162 @@ class karlsruher_system extends bracket {
 		WHERE
 			q.bracket_id='".$this->id."'
 	";
-		
+//		$query = "
+//
+//		SELECT
+//		t.name AS team,
+//		t.id AS team_id,
+//		t.city AS city,
+//		p1.name AS player1,
+//		p2.name AS player2,
+//		p3.name AS player3,
+//		all_matches.count(id) AS matches_played,
+//		matches_won.count(id) AS won,
+//		matches_lost.count(id) AS lost,
+//		matches_draw.count(id) AS draw,
+//		matches_won.count(id) * 3 + matches_draw.count(id) AS points,
+//		all_goals.count(id) AS goals,
+//		all_goals_against.count(id) AS goals_against,
+//		all_goals.count(id) - all_goals_against.count(id) AS goal_difference,
+//		
+//		
+//		FROM
+//		
+//		
+//		
+//		
+//			gm_bracket_qualifications AS q,
+//			
+//			
+//			(SELECT
+//					id
+//				FROM
+//					gm_matches AS m
+//				WHERE
+//					(team1 = t.id
+//					OR
+//					team2 = t.id)
+//				AND
+//					status ='1'				
+//				AND
+//					bracket_id = '".$this->id."'
+//			) AS all_matches,
+//			
+//			
+//			
+//			(SELECT
+//				id
+//			FROM
+//				gm_goals
+//			WHERE
+//				team_id = t.id
+//			AND
+//				((team_id = t.id AND regular = '1')
+//				OR
+//				(team_id != t.id AND regular = '0'))
+//			AND
+//				match_id IN (SELECT id FROM all_matches)
+//			) AS all_goals,
+//			
+//			
+//			(SELECT
+//				id
+//			FROM
+//				gm_goals
+//			WHERE
+//				team_id = t.id
+//			AND
+//				((team_id != t.id AND regular = '1')
+//				OR
+//				(team_id = t.id AND regular = '0'))
+//			AND
+//				match_id IN (SELECT id FROM all_matches)
+//			) AS all_goals_against,
+//			
+//			
+//			
+//			(SELECT
+//					id
+//				FROM
+//					all_matches
+//				WHERE
+//					(
+//						SELECT
+//							count(*)
+//						FROM
+//							all_goals
+//						WHERE
+//							all_goals.match_id = id
+//					) > (
+//						SELECT
+//							count(*)
+//						FROM
+//							all_goals_against
+//						WHERE
+//							all_goals_against.match_id = id
+//					)
+//			) AS matches_won,
+//			
+//			
+//			
+//			(SELECT
+//					id
+//				FROM
+//					all_matches
+//				WHERE
+//					(
+//						SELECT
+//							count(*)
+//						FROM
+//							all_goals
+//						WHERE
+//							all_goals.match_id = id
+//					) < (
+//						SELECT
+//							count(*)
+//						FROM
+//							all_goals_against
+//						WHERE
+//							all_goals_against.match_id = id
+//					)
+//			) AS matches_lost,
+//			
+//
+//			
+//			(SELECT
+//					id
+//				FROM
+//					all_matches
+//				WHERE
+//					(
+//						SELECT
+//							count(*)
+//						FROM
+//							all_goals
+//						WHERE
+//							all_goals.match_id = id
+//					) = (
+//						SELECT
+//							count(*)
+//						FROM
+//							all_goals_against
+//						WHERE
+//							all_goals_against.match_id = id
+//					)
+//			) AS matches_draw,
+//		
+//		
+//		INNER JOIN gm_teams AS t ON q.team_id = t.id
+//		INNER JOIN gm_players AS p1 ON t.player1 = p1.id
+//		INNER JOIN gm_players AS p2 ON t.player2 = p2.id
+//		INNER JOIN gm_players AS p3 ON t.player3 = p3.id
+//		WHERE
+//			q.bracket_id='".$this->id."'
+//	";
 	
 	
 	$query .= "
-		ORDER BY points DESC, matches_won DESC, matches_lost ASC, goal_difference DESC
+		ORDER BY points DESC, matches_won DESC, matches_lost ASC, goal_difference DESC, goals DESC, goals_against ASC
 	";
 	
 	if (is_numeric($limit)){$query .= "LIMIT ".$limit." \n";}

@@ -3,6 +3,7 @@ $bracket_code = 'karlsruher_system';
 $bracket_type = 'Karlsruher System';
 $steps = 2;
 
+
 if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'sort'){
 			
 			
@@ -13,11 +14,11 @@ if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'sort'){
 			for ($offset_count = 0; $offset_count < count($ajax_list); $offset_count++) {
 				if(is_int($offset_count)) {
 					$db->update("value = '$offset_count'", "id = '$ajax_list[$offset_count]'");
-				}
-				else {
-				exit;
+				}else{
+					exit;
 				}
 			}
+			exit;
 			
 }
 
@@ -26,11 +27,12 @@ if (isset($_SESSION['temp']['bracket'])){
 
 if (isset($_SESSION['temp']['bracket']['nextstep'])){
 	
+	
 	$bracket = new karlsruher_system();
 	$bracket->load_entry($_SESSION['temp']['bracket']['id']);
-	
 	$nextstep = $bracket->get_status() + 1;
 	
+
 	
 	switch ($nextstep){
 		
@@ -39,6 +41,8 @@ if (isset($_SESSION['temp']['bracket']['nextstep'])){
 				$_SESSION['temp']['bracket']['nextstep'] = 3;
 				$_SESSION['temp']['bracket']['offset'] = $_POST['offset'];
 
+				$courts = new court();
+				$courts = $courts->list_entries();
 				
 				echo'
 					<form action="' . BASE . '/play_tournament/brackets/new/" method="post">
@@ -51,14 +55,37 @@ if (isset($_SESSION['temp']['bracket']['nextstep'])){
 							<td>Pause between matches:</td>
 							<td><input type="text" name="pause" maxlength="2" /></td>
 						</tr>
+						<tr>
+							<td>Use courts:</td>
+							<td>';
+				foreach ($courts as $court){
+					echo '<input type="checkbox" name="court_'.$court['id'].'" value="1" /> '.$court['name'] . '<br />';
+				}
+				
+				echo'
+							</td>
 					</table>
 					<input type="submit" value="Submit" />
 					
 					</form>';
+				
+
+				
 			break;
 	
 			
 			case 3:
+				
+				$courts = new court_occupation();
+			#@todo:crap:
+				foreach ($_POST as $key=>$value){
+					if (substr ($key, 0, 5) == 'court'){
+						$key = substr ($key, 6);
+						if ($value == 1){
+							$courts->store($key, $bracket->get_id());
+						}
+					}
+				}
 
 				$bracket->set_status(3);
 				$bracket->set_timelimit1($_POST['timelimit']);
@@ -86,6 +113,7 @@ if (isset($_SESSION['temp']['bracket']['nextstep'])){
 	$bracket->setup($_SESSION['temp']['bracket']['name'], $bracket_code);
 	$_SESSION['temp']['bracket']['id'] = $bracket->get_id();
 	
+
 	$bracket->set_qualified_teams('all');
 	
 ?>

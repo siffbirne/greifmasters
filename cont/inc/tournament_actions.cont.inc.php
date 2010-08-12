@@ -65,6 +65,9 @@ echo "\n".'
 			<td><a href="/greifmasters/admin/tournament/'.$tournament_id.'/delete">delete this tournament</a></td>
 			<td><a href="/greifmasters/admin/tournament/'.$tournament_id.'/playing_times">set up playing times</a></td>
 		</tr>
+		<tr>
+			<td colspan="2"><a href="/greifmasters/admin/tournament/'.$tournament_id.'/refs">Manage refs</a></td>
+		</tr>
 	</table>
 '."\n";
 

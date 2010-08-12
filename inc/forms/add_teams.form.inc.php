@@ -26,11 +26,11 @@ echo '
 #@todo: check registered teams
 
 
-$teams = new team();
-$teams = $teams->list_entries();
+$refs = new team();
+$refs = $refs->list_entries();
 
 $offset_count = 0;
-	foreach ($teams as $row){
+	foreach ($refs as $row){
 		$offset_count++;
 				echo'
 					<input type="checkbox" name="team_'.$offset_count.'" value="'.$row['id'].'"/> '.$row['name'].'<br />

@@ -13,7 +13,7 @@ require 'functions/forms.function.inc.php';
 require 'config.inc.php';
 require 'settings.php';
 #require 'db.inc.php';
-require 'variables.inc.php';
+
 
 require 'functions/table.function.php';
 
@@ -82,6 +82,13 @@ function img($file){
 	
 	return '<img src="'.GFX_PATH.'/'.$file.'" />';
 	
+}
+
+
+function password_generator($user, $pass){
+	$salt=substr(md5(uniqid()),2,8);
+	$md5=md5($pass.$salt.$user);
+	return array($salt, $md5);
 }
 
 

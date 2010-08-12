@@ -1,6 +1,5 @@
 <?php
-if (isset ( $_GET ['p3'] ) && $_GET ['p3'] == 'sort'){
-			
+if (isset ( $_GET ['p4'] ) && $_GET ['p4'] == 'sort'){
 			
 	parse_str($_POST['data']);
 	
@@ -38,6 +37,7 @@ $query = "
 		INNER JOIN gm_teams AS t2 ON m.team2 = t2.id
 	WHERE
 		m.bracket_id = '".$_SESSION['bracket_id']."'
+		AND u.court_id = '".$_SESSION['court_id']."'
 	ORDER BY u.match_order ASC, u.id ASC
 	LIMIT 5
 ";
@@ -63,7 +63,7 @@ Sortable.create("ajax_list",
 	{
 	onUpdate:function()
 		{
-		new Ajax.Request('<?=BASE?>/play_tournament/matches/ong/sort',
+		new Ajax.Request('<?=BASE?>/play_tournament/matches/ong/<?php echo $_SESSION['court_id']; ?>/sort',
 			{
 			method: "post",
 			parameters: {data: Sortable.serialize("ajax_list")}

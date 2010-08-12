@@ -35,7 +35,7 @@ class goal extends game_event {
 				gm_goals AS g
 				INNER JOIN gm_matches AS m ON m.id = g.match_id
 				INNER JOIN gm_teams AS t ON t.id = g.team_id
-				INNER JOIN gm_players AS p ON p.id = g.player_id
+				LEFT JOIN gm_players AS p ON p.id = g.player_id
 			WHERE
 				g.match_id = '$id'
 				AND

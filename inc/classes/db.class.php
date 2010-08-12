@@ -73,6 +73,8 @@ class db extends mysqli {
 		$result = self::select('*', "id='$id'");
 		$load = $result[0];
 		
+		if ($load == FALSE){return;}
+		
 		while ( list ( $key, $value ) = each ( $load ) ) {
 			$this->$key = $value ;
 		}
@@ -141,7 +143,7 @@ class db extends mysqli {
 		}
 		
 		
-		if ($this->affected_rows == 0){return FALSE;}
+		if ($this->affected_rows == 0){return array();}
 		
 		$return = array();
 		

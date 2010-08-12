@@ -9,11 +9,33 @@ $beginn = $messung;
 error_reporting(E_ALL ^ E_NOTICE);
 session_start ();
 ob_start();
+require 'inc/functions.inc.php';
 
 if ($_SESSION['user'] == 2){$_SESSION['admin']=TRUE;}
 
-require 'inc/functions.inc.php';
+#@FIXME: total lack of proper rights management. just a crappy hack:
 
+if (!isset ( $_SESSION ['user'] )) {
+	$_SESSION ['cat'] = 'login';
+}else{
+	if (isset ( $_GET ['cat'] )) {
+		$_SESSION ['cat'] = htmlentities($_GET['cat']);
+	}else{
+		$_SESSION ['cat'] = '';
+	}
+	
+	
+	if ($_SESSION['rights'] == 'ref'){
+		$ref = new ref();
+		$ref->load_entry($_SESSION['user']);
+		$court = $ref->get_court();
+		$_SESSION['bracket_id'] = $ref->get_bracket();
+		if ($_GET['cat'] != 'logout') {$_SESSION['cat'] = 'play_tournament';}
+		$_GET['p1'] = 'matches';
+		$_GET['p2'] = 'ong';
+		$_GET['p3'] = $court;
+	}
+}
 
 if (isset($_SESSION['notification'])){
 	echo notifications($_SESSION['notification']);
@@ -21,13 +43,7 @@ if (isset($_SESSION['notification'])){
 }
 
 
-if (! isset ( $_SESSION ['user'] )) {
-	$_SESSION ['cat'] = 'login';
-}elseif (isset ( $_GET ['cat'] )) {
-	$_SESSION ['cat'] = htmlentities($_GET['cat']);
-}else{
-	$_SESSION ['cat'] = '';
-}
+
 
 
 $navigation = '';
