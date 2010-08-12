@@ -11,7 +11,7 @@ session_start ();
 ob_start();
 require 'inc/functions.inc.php';
 
-if ($_SESSION['user'] == 2){$_SESSION['admin']=TRUE;}
+if ($_SESSION['rights'] == 'admin'){$_SESSION['admin']=TRUE;}
 
 #@FIXME: total lack of proper rights management. just a crappy hack:
 

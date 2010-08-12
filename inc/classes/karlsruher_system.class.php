@@ -97,7 +97,7 @@ class karlsruher_system extends bracket {
 
 
 		
-		#$matchlist = shuffle_matchlist($matchlist,$number_of_teams);
+		$matchlist = shuffle_matchlist($matchlist,$number_of_teams);
 	#@todo: seperate the shuffle function, or add a possibility to skip that step
 
 		
